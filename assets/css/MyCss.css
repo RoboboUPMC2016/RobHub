@@ -1,0 +1,53 @@
+@import url(https://fonts.googleapis.com/css?family=Audiowide);
+
+html, body {
+	height: 100%;
+}
+
+h1 {
+	font-family: 'Audiowide', serif;
+	font-size: 80px;
+	color: #DDCCEE;
+}
+
+h2 {
+	font-family: 'Audiowide', serif;
+}
+
+h3 {
+	font-family: 'Audiowide', serif;
+	
+}
+
+h4 {
+	font-family: 'Audiowide', serif;
+	color: #DDCCEE;
+}
+
+div{
+	font-family: 'Audiowide', serif;
+}
+
+.lead {
+	color: #DDCCEE;
+}
+
+.container-full {
+	margin: 0 auto;
+	width: 100%;
+	min-height: 90%;
+	color: #eee;
+	overflow: hidden;
+
+background-image: url(../img/fd.jpg);
+	border-radius: 10px;
+}
+
+.container-full a {
+	color: #efefef;
+	text-decoration: none;
+}
+
+.v-center {
+	margin-top: 7%;
+}
