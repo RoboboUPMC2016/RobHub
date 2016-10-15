@@ -4,7 +4,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
 <title>tpdev-homepage</title>
-<link href="assets/css/MyCss.css" rel="stylesheet">
+	<link href="assets/css/MyCss.css" rel="stylesheet">
+	<link href="assets/css/bootstrap.css" rel="stylesheet">
+	<link href="assets/css/bootstrap.css" rel="stylesheet">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="assets/js/bootstrap.min.js"></script>
+	<script src="assets/js/bootstrap.js"></script>
+	<script src="assets/js/jquery-3.1.1.js"></script>
 </head>
 <body>
 	<div class="container-full">
