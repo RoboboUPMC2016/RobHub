@@ -1,3 +1,24 @@
+<?php
+  try
+  {
+    $str = file_get_contents("config-database.json");
+    $dbInfo = json_decode($str, true);
+
+
+    $db = new PDO("mysql:host=" . $dbInfo["host"] . ";dbname=" . $dbInfo["dbname"], $dbInfo["user"], $dbInfo["password"]);
+    $resultats=$db->query("SELECT * FROM User");
+    $resultats->setFetchMode(PDO::FETCH_OBJ);
+    while( $resultat = $resultats->fetch() )
+    {
+            echo 'Utilisateur : '.$resultat->User_username.'<br>';
+    }
+    $resultats->closeCursor();
+  }
+  catch (Exception $e)
+  {
+    die("Erreur : " . $e->getMessage());
+  }
+?>
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -17,7 +38,7 @@
     <div class="container-full">
       <div class="row">
         <div class="col-lg-12 text-center v-center">
-          <h1>Bienvenue sur le reseau RobHub</h1>
+          <h1>Bienvenue sur le réseau RobHub</h1>
           <p class="lead">Veuillez vous connecter pour accceder au site</p><br>
 
           <form class="col-lg-12" action="index.php" method="post">
