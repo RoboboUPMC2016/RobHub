@@ -51,3 +51,11 @@ background-image: url(../img/fd.jpg);
 .v-center {
 	margin-top: 7%;
 }
+
+.center-title {
+	text-align: center;
+}
+
+.justify-text {
+	text-align: justify;
+}
