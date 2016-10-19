@@ -1,10 +1,9 @@
 <footer id="fh5co-footer" role="contentinfo">
-  
-    <div class="container">
-      <div class="col-md-3 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
-        <h3>A propos de nous</h3>
-        <p>Nous sommes l'équipe Robobo.</p>
-      </div>
+  <div class="container">
+    <div class="col-md-3 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
+      <h3>A propos de nous</h3>
+      <p>Nous sommes l'équipe Robobo.</p>
+    </div>
 
 <!--      <div class="col-md-6 col-md-push-1 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
         <h3>Our Services</h3>
@@ -32,11 +31,8 @@
           <li><a href="#"><i class="icon-instagram"></i> Instagram</a></li>
         </ul>
       </div> -->
-      
-      
-      <div class="col-md-12 fh5co-copyright text-center">
-        <p>&copy; UPMC GPSTL 2016</p> 
-      </div>
-      
-    </div>
+    <div class="col-md-12 fh5co-copyright text-center">
+      <p>&copy; UPMC GPSTL 2016</p> 
+    </div>  
+  </div>
 </footer>
