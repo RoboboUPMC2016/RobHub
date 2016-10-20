@@ -18,10 +18,10 @@
     $_POST[SignupValidator::PASSWORD] = cleanInput($_POST[SignupValidator::PASSWORD]);
     $_POST[SignupValidator::CONFIRM_PASSWORD] = cleanInput($_POST[SignupValidator::CONFIRM_PASSWORD]);
 
-    $SignupValidator = new SignupValidator($_POST[SignupValidator::LOGIN], $_POST[SignupValidator::FIRSTNAME], $_POST[SignupValidator::LASTNAME],
+    $signupValidator = new SignupValidator($_POST[SignupValidator::LOGIN], $_POST[SignupValidator::FIRSTNAME], $_POST[SignupValidator::LASTNAME],
                                        $_POST[SignupValidator::PASSWORD], $_POST[SignupValidator::CONFIRM_PASSWORD]);
     // If form is valid
-    if ($SignupValidator->check())
+    if ($signupValidator->check())
     {
       // Insert user in database
       $stmt = DB::prepare("INSERT INTO User (User_username, User_password, User_firstname, User_lastname) VALUES (?, ?, ?, ?)");
@@ -66,9 +66,9 @@
                     <input class="form-control" name="<?php echo SignupValidator::LOGIN; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LOGIN])) echo $_POST[SignupValidator::LOGIN]; ?>">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($SignupValidator))
+                      if (isset($signupValidator))
                       {
-                        echo $SignupValidator->getErrorMessage(SignupValidator::LOGIN);
+                        echo $signupValidator->getErrorMessage(SignupValidator::LOGIN);
                       }
                     ?>
                     </h5>
@@ -81,9 +81,9 @@
                     <input class="form-control" name="<?php echo SignupValidator::FIRSTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::FIRSTNAME])) echo $_POST[SignupValidator::FIRSTNAME]; ?>">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($SignupValidator))
+                      if (isset($signupValidator))
                       {
-                        echo $SignupValidator->getErrorMessage(SignupValidator::FIRSTNAME);
+                        echo $signupValidator->getErrorMessage(SignupValidator::FIRSTNAME);
                       }
                     ?>
                     </h5>
@@ -96,9 +96,9 @@
                     <input class="form-control" name="<?php echo SignupValidator::LASTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LASTNAME])) echo $_POST[SignupValidator::LASTNAME]; ?>">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($SignupValidator))
+                      if (isset($signupValidator))
                       {
-                        echo $SignupValidator->getErrorMessage(SignupValidator::LASTNAME);
+                        echo $signupValidator->getErrorMessage(SignupValidator::LASTNAME);
                       }
                     ?>
                     </h5>
@@ -111,9 +111,9 @@
                     <input class="form-control" name="<?php echo SignupValidator::PASSWORD; ?>" type="password">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($SignupValidator))
+                      if (isset($signupValidator))
                       {
-                        echo $SignupValidator->getErrorMessage(SignupValidator::PASSWORD);
+                        echo $signupValidator->getErrorMessage(SignupValidator::PASSWORD);
                       }
                     ?>
                     </h5>
@@ -126,9 +126,9 @@
                     <input class="form-control" name="<?php echo SignupValidator::CONFIRM_PASSWORD; ?>" type="password">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($SignupValidator))
+                      if (isset($signupValidator))
                       {
-                        echo $SignupValidator->getErrorMessage(SignupValidator::CONFIRM_PASSWORD);
+                        echo $signupValidator->getErrorMessage(SignupValidator::CONFIRM_PASSWORD);
                       }
                     ?>
                     </h5>
