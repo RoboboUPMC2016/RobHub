@@ -1,7 +1,7 @@
 <header id="fh5co-header" role="banner">
   <div class="container">
     <div class="header-inner">
-      <h1><img src="images/robhub.svg" alt="robhub logo"><a href="index.php">RobHub</a></h1>
+      <h1><img src="images/robhub.svg" id="logo-robhub" alt="robhub logo"><a href="index.php">RobHub</a></h1>
         <nav role="navigation">
           <ul>
           <?php
