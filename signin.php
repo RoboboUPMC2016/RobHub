@@ -67,7 +67,7 @@
 
                 <div class="col-md-12">
                   <div class="form-group">
-                    <input value="S'inscrire" name="<?php echo SigninValidator::BTN_SIGNIN; ?>" class="btn btn-primary" type="submit">
+                    <input value="Se connecter" name="<?php echo SigninValidator::BTN_SIGNIN; ?>" class="btn btn-primary" type="submit">
                   </div>
                 </div>
               </form>

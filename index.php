@@ -23,9 +23,9 @@
           <div class="row">
             <div class="col-md-4 text-center">
               <div class="blog-inner">
-                <a href="#"><img class="img-responsive" src="images/image_4.jpg" alt="Blog"></a>
+                <a href="https://github.com/RoboboUPMC2016/RobApp"><img class="img-responsive" src="images/image_4.jpg" alt="Blog"></a>
                 <div class="desc">
-                  <h3><a href="https://github.com/RoboboUPMC2016/RobApp">RobApp</a></h3>
+                  <h3><a>RobApp</a></h3>
                   <p> 
                   RobApp est l'application permettant de donner un comportement à votre robobo.
                   Avec RobApp vous donnez au robobo les comportements que vous créé avec RobDev.
@@ -38,9 +38,9 @@
 
             <div class="col-md-4 text-center">
               <div class="blog-inner">
-                <a href="#"><img class="img-responsive" src="images/image_5.jpg" alt="Blog"></a>
+                <a href="https://github.com/RoboboUPMC2016/RobHub"><img class="img-responsive" src="images/image_5.jpg" alt="Blog"></a>
                 <div class="desc">
-                  <h3><a href="https://github.com/RoboboUPMC2016/RobHub">RobHub</a></h3>
+                  <h3><a>RobHub</a></h3>
                   <p>
                   RobHub est le reseau social de votre robobo. Vous pouvez partager des comportements
                   créés avec le framework RobDev, mais aussi des vidéos et des photos.
@@ -51,9 +51,9 @@
 
             <div class="col-md-4 text-center">
               <div class="blog-inner">
-                <a href="#"><img class="img-responsive" src="images/image_6.jpg" alt="Blog"></a>
+                <a href="https://github.com/RoboboUPMC2016/RobDev"><img class="img-responsive" src="images/image_6.jpg" alt="Blog"></a>
                 <div class="desc">
-                  <h3><a href="https://github.com/RoboboUPMC2016/RobDev">RobDev</a></h3>
+                  <h3><a>RobDev</a></h3>
                   <p> 
                   RobDev est un framework pour créer les comportements de votre Robobo. Pour savoir comment
                   créer un comportement rendez vous sur le
