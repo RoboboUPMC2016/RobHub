@@ -69,6 +69,7 @@
       <?php require_once "includes/footer.php" ?>
     </div>
   
+  
     <?php require_once "includes/scripts_js.php"; ?>
   </body>
 </html>
