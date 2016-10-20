@@ -1,3 +1,6 @@
+<?php
+  session_start();
+?>
 <!DOCTYPE html>
   <?php 
     require_once "includes/global.php";
@@ -13,7 +16,7 @@
         <div class="container">
           <div class="row">
             <div class="col-md-8 col-md-offset-2 text-center">
-              <h2>Bienvenue sur le réseau RobHub</h2>
+              <h2>Bienvenue sur le réseau RobHub <?php if (isset($_SESSION["firstname"])) { echo $_SESSION["firstname"]; } ?></h2>
             </div>
           </div>
             
