@@ -1,5 +1,12 @@
 <!-- Check form -->
 <?php
+  session_start();
+  if (isset($_SESSION["login"]))
+  {
+    header("Location: index.php");
+    exit();
+  }
+
   require_once "classes/FormValidator.php";
   require_once "functions/functions.php";
 
@@ -18,7 +25,16 @@
     {
       // Insert user in database
       $stmt = DB::prepare("INSERT INTO User (User_username, User_password, User_firstname, User_lastname) VALUES (?, ?, ?, ?)");
-      $stmt->execute([$_POST[FormValidator::LOGIN], sha1($_POST[FormValidator::PASSWORD]), $_POST[FormValidator::FIRSTNAME], $_POST[FormValidator::LASTNAME]]);
+      if ($stmt->execute([$_POST[FormValidator::LOGIN], sha1($_POST[FormValidator::PASSWORD]), $_POST[FormValidator::FIRSTNAME], $_POST[FormValidator::LASTNAME]]))
+      {
+        session_start();
+        $_SESSION["login"] = $_POST[FormValidator::LOGIN];
+        $_SESSION["firstname"] = $_POST[FormValidator::FIRSTNAME];
+        $_SESSION["lastname"] = $_POST[FormValidator::LASTNAME];
+
+        header("Location: index.php");
+        exit();
+      }
     }
   }
 ?>
