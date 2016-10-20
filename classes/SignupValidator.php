@@ -1,7 +1,7 @@
 <?php
 require_once "DB.php";
 
-class FormValidator
+class SignupValidator
 {
     private $login;
     private $firstname;
@@ -30,11 +30,11 @@ class FormValidator
         $this->confirmPassword = $confirmPassword;
 
         $this->errorMessages = [
-            FormValidator::LOGIN => "",
-            FormValidator::FIRSTNAME => "",
-            FormValidator::LASTNAME => "",
-            FormValidator::PASSWORD => "",
-            FormValidator::CONFIRM_PASSWORD => ""
+            SignupValidator::LOGIN => "",
+            SignupValidator::FIRSTNAME => "",
+            SignupValidator::LASTNAME => "",
+            SignupValidator::PASSWORD => "",
+            SignupValidator::CONFIRM_PASSWORD => ""
         ];
     }
 
@@ -55,9 +55,9 @@ class FormValidator
 
     private function isLoginValid()
     {
-        if (strlen($this->login) < FormValidator::MIN_CHAR_LOGIN)
+        if (strlen($this->login) < SignupValidator::MIN_CHAR_LOGIN)
         {
-            $this->errorMessages[FormValidator::LOGIN] = "Le login doit contenir au moins " . FormValidator::MIN_CHAR_LOGIN . " caractères.";
+            $this->errorMessages[SignupValidator::LOGIN] = "Le login doit contenir au moins " . SignupValidator::MIN_CHAR_LOGIN . " caractères.";
             return false;
         }
 
@@ -65,7 +65,7 @@ class FormValidator
         $row = DB::run("SELECT * FROM User WHERE User_username=?", [$this->login])->fetchColumn();
         if ($row)
         {
-            $this->errorMessages[FormValidator::LOGIN] = "Le login existe déjà.";
+            $this->errorMessages[SignupValidator::LOGIN] = "Le login existe déjà.";
             return false;
         }
 
@@ -76,13 +76,13 @@ class FormValidator
     {
         if (empty($this->firstname))
         {
-            $this->errorMessages[FormValidator::FIRSTNAME] = "Le prénom ne peut pas être vide.";
+            $this->errorMessages[SignupValidator::FIRSTNAME] = "Le prénom ne peut pas être vide.";
             return false;
         }
 
         if (!preg_match("/^[a-zA-Z]+$/", $this->firstname))
         {
-            $this->errorMessages[FormValidator::FIRSTNAME] = "Seules les lettres sont autorisées.";
+            $this->errorMessages[SignupValidator::FIRSTNAME] = "Seules les lettres sont autorisées.";
             return false;
         }
 
@@ -93,13 +93,13 @@ class FormValidator
     {
         if (empty($this->lastname))
         {
-            $this->errorMessages[FormValidator::LASTNAME] = "Le nom ne peut pas être vide.";
+            $this->errorMessages[SignupValidator::LASTNAME] = "Le nom ne peut pas être vide.";
             return false;
         }
 
         if (!preg_match("/^[a-zA-Z]+$/", $this->lastname))
         {
-            $this->errorMessages[FormValidator::LASTNAME] = "Seules les lettres sont autorisées.";
+            $this->errorMessages[SignupValidator::LASTNAME] = "Seules les lettres sont autorisées.";
             return false;
         }
 
@@ -108,9 +108,9 @@ class FormValidator
 
     private function isPasswordValid()
     {
-        if (strlen($this->password) < FormValidator::MIN_CHAR_PWD)
+        if (strlen($this->password) < SignupValidator::MIN_CHAR_PWD)
         {
-            $this->errorMessages[FormValidator::PASSWORD] = "Le mot de passe doit contenir au moins " . FormValidator::MIN_CHAR_PWD . " caractères.";
+            $this->errorMessages[SignupValidator::PASSWORD] = "Le mot de passe doit contenir au moins " . SignupValidator::MIN_CHAR_PWD . " caractères.";
             return false;
         }
 
@@ -121,7 +121,7 @@ class FormValidator
     {
         if (strcmp($this->password, $this->confirmPassword) !== 0)
         {
-            $this->errorMessages[FormValidator::CONFIRM_PASSWORD] = "Les deux mots de passe sont différents.";
+            $this->errorMessages[SignupValidator::CONFIRM_PASSWORD] = "Les deux mots de passe sont différents.";
             return false;
         }
 

@@ -7,30 +7,30 @@
     exit();
   }
 
-  require_once "classes/FormValidator.php";
+  require_once "classes/SignupValidator.php";
   require_once "functions/functions.php";
 
-  if (isset($_POST[FormValidator::BTN_SIGNUP]))
+  if (isset($_POST[SignupValidator::BTN_SIGNUP]))
   {
-    $_POST[FormValidator::LOGIN] = cleanInput($_POST[FormValidator::LOGIN]);
-    $_POST[FormValidator::FIRSTNAME] = cleanInput($_POST[FormValidator::FIRSTNAME]);
-    $_POST[FormValidator::LASTNAME] = cleanInput($_POST[FormValidator::LASTNAME]);
-    $_POST[FormValidator::PASSWORD] = cleanInput($_POST[FormValidator::PASSWORD]);
-    $_POST[FormValidator::CONFIRM_PASSWORD] = cleanInput($_POST[FormValidator::CONFIRM_PASSWORD]);
+    $_POST[SignupValidator::LOGIN] = cleanInput($_POST[SignupValidator::LOGIN]);
+    $_POST[SignupValidator::FIRSTNAME] = cleanInput($_POST[SignupValidator::FIRSTNAME]);
+    $_POST[SignupValidator::LASTNAME] = cleanInput($_POST[SignupValidator::LASTNAME]);
+    $_POST[SignupValidator::PASSWORD] = cleanInput($_POST[SignupValidator::PASSWORD]);
+    $_POST[SignupValidator::CONFIRM_PASSWORD] = cleanInput($_POST[SignupValidator::CONFIRM_PASSWORD]);
 
-    $formValidator = new FormValidator($_POST[FormValidator::LOGIN], $_POST[FormValidator::FIRSTNAME], $_POST[FormValidator::LASTNAME],
-                                       $_POST[FormValidator::PASSWORD], $_POST[FormValidator::CONFIRM_PASSWORD]);
+    $SignupValidator = new SignupValidator($_POST[SignupValidator::LOGIN], $_POST[SignupValidator::FIRSTNAME], $_POST[SignupValidator::LASTNAME],
+                                       $_POST[SignupValidator::PASSWORD], $_POST[SignupValidator::CONFIRM_PASSWORD]);
     // If form is valid
-    if ($formValidator->check())
+    if ($SignupValidator->check())
     {
       // Insert user in database
       $stmt = DB::prepare("INSERT INTO User (User_username, User_password, User_firstname, User_lastname) VALUES (?, ?, ?, ?)");
-      if ($stmt->execute([$_POST[FormValidator::LOGIN], sha1($_POST[FormValidator::PASSWORD]), $_POST[FormValidator::FIRSTNAME], $_POST[FormValidator::LASTNAME]]))
+      if ($stmt->execute([$_POST[SignupValidator::LOGIN], sha1($_POST[SignupValidator::PASSWORD]), $_POST[SignupValidator::FIRSTNAME], $_POST[SignupValidator::LASTNAME]]))
       {
         session_start();
-        $_SESSION["login"] = $_POST[FormValidator::LOGIN];
-        $_SESSION["firstname"] = $_POST[FormValidator::FIRSTNAME];
-        $_SESSION["lastname"] = $_POST[FormValidator::LASTNAME];
+        $_SESSION["login"] = $_POST[SignupValidator::LOGIN];
+        $_SESSION["firstname"] = $_POST[SignupValidator::FIRSTNAME];
+        $_SESSION["lastname"] = $_POST[SignupValidator::LASTNAME];
 
         header("Location: index.php");
         exit();
@@ -63,12 +63,12 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Identifiant</h4>
-                    <input class="form-control" name="<?php echo FormValidator::LOGIN; ?>" type="text" value="<?php if (isset($_POST[FormValidator::LOGIN])) echo $_POST[FormValidator::LOGIN]; ?>">
+                    <input class="form-control" name="<?php echo SignupValidator::LOGIN; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LOGIN])) echo $_POST[SignupValidator::LOGIN]; ?>">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($formValidator))
+                      if (isset($SignupValidator))
                       {
-                        echo $formValidator->getErrorMessage(FormValidator::LOGIN);
+                        echo $SignupValidator->getErrorMessage(SignupValidator::LOGIN);
                       }
                     ?>
                     </h5>
@@ -78,12 +78,12 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Prénom</h4>
-                    <input class="form-control" name="<?php echo FormValidator::FIRSTNAME; ?>" type="text" value="<?php if (isset($_POST[FormValidator::FIRSTNAME])) echo $_POST[FormValidator::FIRSTNAME]; ?>">
+                    <input class="form-control" name="<?php echo SignupValidator::FIRSTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::FIRSTNAME])) echo $_POST[SignupValidator::FIRSTNAME]; ?>">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($formValidator))
+                      if (isset($SignupValidator))
                       {
-                        echo $formValidator->getErrorMessage(FormValidator::FIRSTNAME);
+                        echo $SignupValidator->getErrorMessage(SignupValidator::FIRSTNAME);
                       }
                     ?>
                     </h5>
@@ -93,12 +93,12 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Nom</h4>
-                    <input class="form-control" name="<?php echo FormValidator::LASTNAME; ?>" type="text" value="<?php if (isset($_POST[FormValidator::LASTNAME])) echo $_POST[FormValidator::LASTNAME]; ?>">
+                    <input class="form-control" name="<?php echo SignupValidator::LASTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LASTNAME])) echo $_POST[SignupValidator::LASTNAME]; ?>">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($formValidator))
+                      if (isset($SignupValidator))
                       {
-                        echo $formValidator->getErrorMessage(FormValidator::LASTNAME);
+                        echo $SignupValidator->getErrorMessage(SignupValidator::LASTNAME);
                       }
                     ?>
                     </h5>
@@ -108,12 +108,12 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Mot de passe</h4>
-                    <input class="form-control" name="<?php echo FormValidator::PASSWORD; ?>" type="password">
+                    <input class="form-control" name="<?php echo SignupValidator::PASSWORD; ?>" type="password">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($formValidator))
+                      if (isset($SignupValidator))
                       {
-                        echo $formValidator->getErrorMessage(FormValidator::PASSWORD);
+                        echo $SignupValidator->getErrorMessage(SignupValidator::PASSWORD);
                       }
                     ?>
                     </h5>
@@ -123,12 +123,12 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Confirmation de mot de passe</h4>
-                    <input class="form-control" name="<?php echo FormValidator::CONFIRM_PASSWORD; ?>" type="password">
+                    <input class="form-control" name="<?php echo SignupValidator::CONFIRM_PASSWORD; ?>" type="password">
                     <h5 class="invalidInput">
                     <?php
-                      if (isset($formValidator))
+                      if (isset($SignupValidator))
                       {
-                        echo $formValidator->getErrorMessage(FormValidator::CONFIRM_PASSWORD);
+                        echo $SignupValidator->getErrorMessage(SignupValidator::CONFIRM_PASSWORD);
                       }
                     ?>
                     </h5>
@@ -137,7 +137,7 @@
 
                 <div class="col-md-12">
                   <div class="form-group">
-                    <input value="S'inscrire" name="<?php echo FormValidator::BTN_SIGNUP; ?>" class="btn btn-primary" type="submit">
+                    <input value="S'inscrire" name="<?php echo SignupValidator::BTN_SIGNUP; ?>" class="btn btn-primary" type="submit">
                   </div>
                 </div>
               </form>
