@@ -6,12 +6,12 @@ class DB
     protected function __construct() {}
     protected function __clone() {}
 
-    const CONFIG_DATABASE_PATH = "config/config-database.json";
+    const CONFIG_PATH = "config/config-database.json";
     const HOST = "host";
-    const DB_NAME = "dbname";
-    const DB_USER = "user";
-    const DB_PASSWORD = "password";
-    const DB_CHAR = "dbchar";
+    const NAME = "dbname";
+    const USER = "user";
+    const PASSWORD = "password";
+    const CHARSET = "dbchar";
 
     public static function instance()
     {
@@ -23,11 +23,11 @@ class DB
                 PDO::ATTR_EMULATE_PREPARES   => FALSE,
             );
 
-            $str = file_get_contents(DB::CONFIG_DATABASE_PATH);
+            $str = file_get_contents(DB::CONFIG_PATH);
             $dbInfo = json_decode($str, true);
 
-            $dsn = 'mysql:host=' . $dbInfo[DB::HOST] . ';dbname=' . $dbInfo[DB::DB_NAME]. ';charset=' . $dbInfo[DB::DB_CHAR];
-            self::$instance = new PDO($dsn, $dbInfo[DB::DB_USER], $dbInfo[DB::DB_PASSWORD], $opt);
+            $dsn = 'mysql:host=' . $dbInfo[DB::HOST] . ';dbname=' . $dbInfo[DB::NAME]. ';charset=' . $dbInfo[DB::CHARSET];
+            self::$instance = new PDO($dsn, $dbInfo[DB::USER], $dbInfo[DB::PASSWORD], $opt);
         }
         return self::$instance;
     }

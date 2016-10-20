@@ -3,7 +3,7 @@
   require_once "classes/FormValidator.php";
   require_once "functions/functions.php";
 
-  if (isset($_POST["btn-signin"]))
+  if (isset($_POST[FormValidator::BTN_SIGNUP]))
   {
     $_POST[FormValidator::LOGIN] = cleanInput($_POST[FormValidator::LOGIN]);
     $_POST[FormValidator::FIRSTNAME] = cleanInput($_POST[FormValidator::FIRSTNAME]);
@@ -13,7 +13,13 @@
 
     $formValidator = new FormValidator($_POST[FormValidator::LOGIN], $_POST[FormValidator::FIRSTNAME], $_POST[FormValidator::LASTNAME],
                                        $_POST[FormValidator::PASSWORD], $_POST[FormValidator::CONFIRM_PASSWORD]);
-    $formValidator->check();
+    // If form is valid
+    if ($formValidator->check())
+    {
+      // Insert user in database
+      $stmt = DB::prepare("INSERT INTO User (User_username, User_password, User_firstname, User_lastname) VALUES (?, ?, ?, ?)");
+      $stmt->execute([$_POST[FormValidator::LOGIN], sha1($_POST[FormValidator::PASSWORD]), $_POST[FormValidator::FIRSTNAME], $_POST[FormValidator::LASTNAME]]);
+    }
   }
 ?>
 <!DOCTYPE html>
@@ -41,7 +47,7 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Identifiant</h4>
-                    <input class="form-control" name="login" type="text" value="<?php if (isset($_POST["login"])) echo $_POST["login"]; ?>">
+                    <input class="form-control" name="<?php echo FormValidator::LOGIN; ?>" type="text" value="<?php if (isset($_POST[FormValidator::LOGIN])) echo $_POST[FormValidator::LOGIN]; ?>">
                     <h5 class="invalidInput">
                     <?php
                       if (isset($formValidator))
@@ -56,7 +62,7 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Prénom</h4>
-                    <input class="form-control" name="firstname" type="text" value="<?php if (isset($_POST["firstname"])) echo $_POST["firstname"]; ?>">
+                    <input class="form-control" name="<?php echo FormValidator::FIRSTNAME; ?>" type="text" value="<?php if (isset($_POST[FormValidator::FIRSTNAME])) echo $_POST[FormValidator::FIRSTNAME]; ?>">
                     <h5 class="invalidInput">
                     <?php
                       if (isset($formValidator))
@@ -71,7 +77,7 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Nom</h4>
-                    <input class="form-control" name="lastname" type="text" value="<?php if (isset($_POST["lastname"])) echo $_POST["lastname"]; ?>">
+                    <input class="form-control" name="<?php echo FormValidator::LASTNAME; ?>" type="text" value="<?php if (isset($_POST[FormValidator::LASTNAME])) echo $_POST[FormValidator::LASTNAME]; ?>">
                     <h5 class="invalidInput">
                     <?php
                       if (isset($formValidator))
@@ -86,7 +92,7 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Mot de passe</h4>
-                    <input class="form-control" name="password" type="password">
+                    <input class="form-control" name="<?php echo FormValidator::PASSWORD; ?>" type="password">
                     <h5 class="invalidInput">
                     <?php
                       if (isset($formValidator))
@@ -101,7 +107,7 @@
                 <div class="col-md-11">
                   <div class="form-group">
                     <h4>Confirmation de mot de passe</h4>
-                    <input class="form-control" name="confirm-password" type="password">
+                    <input class="form-control" name="<?php echo FormValidator::CONFIRM_PASSWORD; ?>" type="password">
                     <h5 class="invalidInput">
                     <?php
                       if (isset($formValidator))
@@ -115,7 +121,7 @@
 
                 <div class="col-md-12">
                   <div class="form-group">
-                    <input value="S'inscrire" name="btn-signin" class="btn btn-primary" type="submit">
+                    <input value="S'inscrire" name="<?php echo FormValidator::BTN_SIGNUP; ?>" class="btn btn-primary" type="submit">
                   </div>
                 </div>
               </form>

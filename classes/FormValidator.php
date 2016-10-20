@@ -16,6 +16,7 @@ class FormValidator
     const LASTNAME = "lastname";
     const PASSWORD = "password";
     const CONFIRM_PASSWORD = "confirm-password";
+    const BTN_SIGNUP = "btn-sigup";
 
     const MIN_CHAR_PWD = 4;
     const MIN_CHAR_LOGIN = 3;
