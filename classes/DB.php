@@ -1,17 +1,17 @@
 <?php
-define("CONFIG_DATABASE_PATH", "config/config-database.json");
-define("HOST", "host");
-define("DBNAME", "dbname");
-define("USER", "user");
-define("PASSWORD", "password");
-define("DBCHAR", "dbchar");
-
 class DB
 {
     protected static $instance = null;
 
     protected function __construct() {}
     protected function __clone() {}
+
+    const CONFIG_DATABASE_PATH = "config/config-database.json";
+    const HOST = "host";
+    const DB_NAME = "dbname";
+    const DB_USER = "user";
+    const DB_PASSWORD = "password";
+    const DB_CHAR = "dbchar";
 
     public static function instance()
     {
@@ -23,11 +23,11 @@ class DB
                 PDO::ATTR_EMULATE_PREPARES   => FALSE,
             );
 
-            $str = file_get_contents(CONFIG_DATABASE_PATH);
+            $str = file_get_contents(DB::CONFIG_DATABASE_PATH);
             $dbInfo = json_decode($str, true);
 
-            $dsn = 'mysql:host=' . $dbInfo[HOST] . ';dbname=' . $dbInfo[DBNAME]. ';charset=' . $dbInfo[DBCHAR];
-            self::$instance = new PDO($dsn, $dbInfo[USER], $dbInfo[PASSWORD], $opt);
+            $dsn = 'mysql:host=' . $dbInfo[DB::HOST] . ';dbname=' . $dbInfo[DB::DB_NAME]. ';charset=' . $dbInfo[DB::DB_CHAR];
+            self::$instance = new PDO($dsn, $dbInfo[DB::DB_USER], $dbInfo[DB::DB_PASSWORD], $opt);
         }
         return self::$instance;
     }

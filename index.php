@@ -1,13 +1,13 @@
 <!DOCTYPE html>
   <?php 
-    include "includes/global.php";
+    require_once "includes/global.php";
     $title = $TITLE_HOME;
-    include "includes/html_head.php";
+    require_once "includes/html_head.php";
   ?>
 
   <body> 
     <div id="fh5co-page">
-      <?php include "includes/header.php"; ?>
+      <?php require_once "includes/header.php"; ?>
 
       <div id="fh5co-intro-section">
         <div class="container">
@@ -63,9 +63,9 @@
         </div>
       </div>
       
-      <?php include "includes/footer.php" ?>
+      <?php require_once "includes/footer.php" ?>
     </div>
   
-    <?php include "includes/scripts_js.php"; ?>
+    <?php require_once "includes/scripts_js.php"; ?>
   </body>
 </html>
