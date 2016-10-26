@@ -46,13 +46,13 @@
 
   ?>
   <body>
-    <div id="fh5co-page">
+    <div id="fspanco-page">
       <?php include "includes/header.php"; ?>
 
-      <div id="fh5co-intro-section">
+      <div id="fspanco-intro-section">
         <div class="container">
           <div class="row">
-            <div class="col-md-6 col-md-offset-3 text-center fh5co-heading">
+            <div class="col-md-6 col-md-offset-3 text-center fspanco-heading">
               <h2>Inscription</h2>
             </div>
           </div>
@@ -62,76 +62,76 @@
               <form method="post" class="row">
                 <div class="col-md-11">
                   <div class="form-group">
-                    <h4>Identifiant</h4>
-                    <input class="form-control" name="<?php echo SignupValidator::LOGIN; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LOGIN])) echo $_POST[SignupValidator::LOGIN]; ?>">
-                    <h5 class="invalidInput">
+                    <label for="<?php echo SignupValidator::LOGIN; ?>">Identifiant</label>
+                    <input class="form-control" id="<?php echo SignupValidator::LOGIN; ?>" name="<?php echo SignupValidator::LOGIN; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LOGIN])) echo $_POST[SignupValidator::LOGIN]; ?>">
+                    <span class="invalidInput">
                     <?php
                       if (isset($signupValidator))
                       {
                         echo $signupValidator->getErrorMessage(SignupValidator::LOGIN);
                       }
                     ?>
-                    </h5>
+                    </span>
                   </div>
                 </div>
 
                 <div class="col-md-11">
                   <div class="form-group">
-                    <h4>Prénom</h4>
-                    <input class="form-control" name="<?php echo SignupValidator::FIRSTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::FIRSTNAME])) echo $_POST[SignupValidator::FIRSTNAME]; ?>">
-                    <h5 class="invalidInput">
+                    <label for="<?php echo SignupValidator::FIRSTNAME; ?>" >Prénom</label>
+                    <input class="form-control" id="<?php echo SignupValidator::FIRSTNAME; ?>" name="<?php echo SignupValidator::FIRSTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::FIRSTNAME])) echo $_POST[SignupValidator::FIRSTNAME]; ?>">
+                    <span class="invalidInput">
                     <?php
                       if (isset($signupValidator))
                       {
                         echo $signupValidator->getErrorMessage(SignupValidator::FIRSTNAME);
                       }
                     ?>
-                    </h5>
+                    </span>
                   </div>
                 </div>
 
                 <div class="col-md-11">
                   <div class="form-group">
-                    <h4>Nom</h4>
-                    <input class="form-control" name="<?php echo SignupValidator::LASTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LASTNAME])) echo $_POST[SignupValidator::LASTNAME]; ?>">
-                    <h5 class="invalidInput">
+                    <label for="<?php echo SignupValidator::LASTNAME; ?>">Nom</label>
+                    <input class="form-control" id="<?php echo SignupValidator::LASTNAME; ?>" name="<?php echo SignupValidator::LASTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LASTNAME])) echo $_POST[SignupValidator::LASTNAME]; ?>">
+                    <span class="invalidInput">
                     <?php
                       if (isset($signupValidator))
                       {
                         echo $signupValidator->getErrorMessage(SignupValidator::LASTNAME);
                       }
                     ?>
-                    </h5>
+                    </span>
                   </div>
                 </div>
 
                 <div class="col-md-11">
                   <div class="form-group">
-                    <h4>Mot de passe</h4>
-                    <input class="form-control" name="<?php echo SignupValidator::PASSWORD; ?>" type="password">
-                    <h5 class="invalidInput">
+                    <label for="<?php echo SignupValidator::PASSWORD; ?>">Mot de passe</label>
+                    <input class="form-control" id="<?php echo SignupValidator::PASSWORD; ?>" name="<?php echo SignupValidator::PASSWORD; ?>" type="password">
+                    <span class="invalidInput">
                     <?php
                       if (isset($signupValidator))
                       {
                         echo $signupValidator->getErrorMessage(SignupValidator::PASSWORD);
                       }
                     ?>
-                    </h5>
+                    </span>
                   </div>
                 </div>
 
                 <div class="col-md-11">
                   <div class="form-group">
-                    <h4>Confirmation de mot de passe</h4>
-                    <input class="form-control" name="<?php echo SignupValidator::CONFIRM_PASSWORD; ?>" type="password">
-                    <h5 class="invalidInput">
+                    <label for="<?php echo SignupValidator::CONFIRM_PASSWORD; ?>">Confirmation de mot de passe</label>
+                    <input class="form-control" id="<?php echo SignupValidator::CONFIRM_PASSWORD; ?>" name="<?php echo SignupValidator::CONFIRM_PASSWORD; ?>" type="password">
+                    <span class="invalidInput">
                     <?php
                       if (isset($signupValidator))
                       {
                         echo $signupValidator->getErrorMessage(SignupValidator::CONFIRM_PASSWORD);
                       }
                     ?>
-                    </h5>
+                    </span>
                   </div>
                 </div>
 

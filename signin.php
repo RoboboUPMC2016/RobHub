@@ -38,15 +38,15 @@
   ?>
 
   <body>
-    <div id="fh5co-page">
+    <div id="fspanco-page">
       <?php require_once "includes/header.php"; ?>
 
-      <div id="fh5co-intro-section">
+      <div id="fspanco-intro-section">
         <div class="container">
           <div class="row">
-            <div class="col-md-6 col-md-offset-3 text-center fh5co-heading">
+            <div class="col-md-6 col-md-offset-3 text-center fspanco-heading">
               <h2>Connexion</h2>
-              <h5 class="invalidInput"><?php if (isset($result) && !$result) { echo "Identifiant ou mot de passe incorect."; } ?></h5>
+              <span class="invalidInput"><?php if (isset($result) && !$result) { echo "Identifiant ou mot de passe incorect."; } ?></span>
             </div>
           </div>
         

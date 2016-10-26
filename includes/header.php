@@ -10,9 +10,11 @@
             {
               echo '<li><a ' . ($title === $TITLE_SIGNUP ? ' class="active" ' : ' ') . ' href="signup.php">' . $TITLE_SIGNUP . '</a></li>';
               echo '<li><a ' . ($title === $TITLE_SIGNIN ? ' class="active" ' : ' ') . ' href="signin.php">' . $TITLE_SIGNIN . '</a></li>';
+                    echo '<li><a ' . ($title === $TITLE_ADD_BEHAVIOR ? ' class="active" ' : ' ') . ' href="addbehavior.php">' . $TITLE_ADD_BEHAVIOR . '</a></li>';
             }
             else
             {
+              echo '<li><a ' . ($title === $TITLE_ADD_BEHAVIOR ? ' class="active" ' : ' ') . ' href="addbehavior.php">' . $TITLE_ADD_BEHAVIOR . '</a></li>';
               echo '<li><a href="logout.php">' . $TITLE_LOGOUT . '</a></li>';
             }
           ?>
