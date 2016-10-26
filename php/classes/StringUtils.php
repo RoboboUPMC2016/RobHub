@@ -5,10 +5,5 @@ class StringUtils
   {
     return htmlspecialchars(strip_tags(trim($str)));
   }
-
-  public static function getContent($str)
-  {
-    return isset($str) ? $str : "";
-  }
 }
 ?>

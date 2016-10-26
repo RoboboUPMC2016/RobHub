@@ -69,7 +69,7 @@ html::tag("div");
             html::add_attribute("class", "form-group");
             html::tag("div");
               html::add_attributes(["class" => "form-control", "placeholder" => "Identifiant", "type" => "text", "name" => SigninForm::LOGIN,
-                                    "value" => StringUtils::getContent($_POST[SigninForm::LOGIN])]);
+                                    "value" => isset($_POST[SigninForm::LOGIN]) ? $_POST[SigninForm::LOGIN] : ""]);
               html::single_tag("input");
             html::close();
           html::close();
