@@ -1,24 +1,25 @@
 <?php
-  session_start();
+session_start();
 
-  if (isset($_SESSION["login"]))
-  {
-    // Destory variables of session
-    $_SESSION = array();
+require_once "php/classes/SessionData";
+if (isset($_SESSION[SessionData::LOGIN]))
+{
+  // Destory variables of session
+  $_SESSION = array();
 
-    // Delete cooki
-    if (ini_get("session.use_cookies")) {
-      $params = session_get_cookie_params();
-      setcookie(session_name(), '', time() - 42000,
-          $params["path"], $params["domain"],
-          $params["secure"], $params["httponly"]
-      );
-    }
-
-    // Destroy session
-    session_destroy();
+  // Delete cookies
+  if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
   }
 
-  header("Location: index.php");
-  exit();
+  // Destroy session
+  session_destroy();
+}
+
+require_once "php/classes/RouteUtils.php";
+RouteUtils::goToHomePage();
 ?>

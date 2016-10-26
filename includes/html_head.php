@@ -16,18 +16,18 @@
   <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700" rel="stylesheet">
 
   <!-- Animate.css -->
-  <link rel="stylesheet" href="css/animate.css">
+  <link rel="stylesheet" href="assets/css/animate.css">
   <!-- Icomoon Icon Fonts-->
-  <link rel="stylesheet" href="css/icomoon.css">
+  <link rel="stylesheet" href="assets/css/icomoon.css">
   <!-- Simple Line Icons -->
-  <link rel="stylesheet" href="css/simple-line-icons.css">
+  <link rel="stylesheet" href="assets/css/simple-line-icons.css">
   <!-- Bootstrap  -->
-  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.css">
   <!-- Theme style  -->
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css">
 
   <!-- Modernizr JS -->
-  <script src="js/modernizr-2.6.2.min.js"></script>
+  <script src="assets/js/modernizr-2.6.2.min.js"></script>
   <!-- FOR IE9 below -->
   <!--[if lt IE 9]>
   <script src="js/respond.min.js"></script>

@@ -10,26 +10,9 @@ if (isset($_SESSION[SessionData::LOGIN]))
   RouteUtils::goToHomePage();
 }
 
-require_once "php/classes/SigninForm.php";
-require_once "php/classes/StringUtils.php";
-
-if (isset($_POST[SigninForm::BTN_SIGNIN]))
-{
-  $_POST[SigninForm::LOGIN] = StringUtils::clean($_POST[SigninForm::LOGIN]);
-  $_POST[SigninForm::PASSWORD] = StringUtils::clean($_POST[SigninForm::PASSWORD]);
-
-  $signInForm = new SigninForm($_POST[SigninForm::LOGIN], $_POST[SigninForm::PASSWORD]);
-  if ($success = $signInForm->performValidation())
-  {
-    require_once "php/classes/RouteUtils.php";
-    RouteUtils::goToHomePage();
-  }
-}
-
-
 require_once "php/classes/PageTitle.php";
 // Set title of the page
-$PAGE_TITLE = PageTitle::SIGNIN;
+$PAGE_TITLE = PageTitle::SIGNUP;
 
 require_once("php/includes/start-html.php");
 
