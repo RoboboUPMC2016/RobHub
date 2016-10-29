@@ -21,6 +21,16 @@ class SignupForm
     const MIN_CHAR_PWD = 4;
     const MIN_CHAR_LOGIN = 3;
 
+    const SUCCESS_SIGNUP = 0;
+    const ERROR_LOGIN_LENGTH = -1;
+    const ERROR_LOGIN_EXISTS = -2;
+    const ERROR_FIRSTNAME_LENGTH = -3;
+    const ERROR_FIRSTNAME_FORMAT = -4;
+    const ERROR_LASTNAME_LENGTH = -5;
+    const ERROR_LASTNAME_FORMAT = -6;
+    const ERROR_PASSWORD_LENGTH = -7;
+    const ERROR_CONFIRM_PASSWORD_INVALID = -8;
+
     public function __construct($login, $firstname, $lastname, $password, $confirmPassword)
     {
         $this->login = $login;
@@ -28,24 +38,11 @@ class SignupForm
         $this->lastname = $lastname;
         $this->password = $password;
         $this->confirmPassword = $confirmPassword;
-
-        $this->errorMessages = [
-            SignupValidator::LOGIN => "",
-            SignupValidator::FIRSTNAME => "",
-            SignupValidator::LASTNAME => "",
-            SignupValidator::PASSWORD => "",
-            SignupValidator::CONFIRM_PASSWORD => ""
-        ];
-    }
-
-    public function getErrorMessage($input)
-    {
-        return $this->errorMessages[$input];
     }
 
     public function performValidation()
     {
-        return
+        return 
             $this->isLoginValid() &&
             $this->isFirstnameValid() &&
             $this->isLastnameValid() &&
@@ -55,77 +52,76 @@ class SignupForm
 
     private function isLoginValid()
     {
-        if (strlen($this->login) < SignupValidator::MIN_CHAR_LOGIN)
+        if (strlen($this->login) < SignupForm::MIN_CHAR_LOGIN)
         {
-            $this->errorMessages[SignupValidator::LOGIN] = "Le login doit contenir au moins " . SignupValidator::MIN_CHAR_LOGIN . " caractères.";
-            return false;
+            /*$this->errorMessages[SignupForm::LOGIN] = "Le login doit contenir au moins " . SignupForm::MIN_CHAR_LOGIN . " caractères.";*/
+            return SignupForm::ERROR_LOGIN_LENGTH;
         }
 
         // Check if login does not already exist in DB
-        $row = DB::run("SELECT * FROM User WHERE User_username=?", [$this->login])->fetchColumn();
-        if ($row)
+        if ($row = DB::run("SELECT * FROM User WHERE User_username=?", [$this->login])->fetchColumn())
         {
-            $this->errorMessages[SignupValidator::LOGIN] = "Le login existe déjà.";
-            return false;
+            //$this->errorMessages[SignupForm::LOGIN] = "Le login existe déjà.";
+            return SignupForm::ERROR_LOGIN_EXISTS;
         }
 
-        return true;
+        return SignupForm::SUCCESS_SIGNUP;
     }
 
     private function isFirstnameValid()
     {
         if (empty($this->firstname))
         {
-            $this->errorMessages[SignupValidator::FIRSTNAME] = "Le prénom ne peut pas être vide.";
-            return false;
+            //$this->errorMessages[SignupForm::FIRSTNAME] = "Le prénom ne peut pas être vide.";
+            return SignupForm::ERROR_FIRSTNAME_LENGTH;
         }
 
         if (!preg_match("/^[a-zA-Z]+$/", $this->firstname))
         {
-            $this->errorMessages[SignupValidator::FIRSTNAME] = "Seules les lettres sont autorisées.";
+            //$this->errorMessages[SignupForm::FIRSTNAME] = "Seules les lettres sont autorisées.";
             return false;
         }
 
-        return true;
+        return SignupForm::SUCCESS_SIGNUP;
     }
 
     private function isLastnameValid()
     {
         if (empty($this->lastname))
         {
-            $this->errorMessages[SignupValidator::LASTNAME] = "Le nom ne peut pas être vide.";
+            //$this->errorMessages[SignupForm::LASTNAME] = "Le nom ne peut pas être vide.";
             return false;
         }
 
         if (!preg_match("/^[a-zA-Z]+$/", $this->lastname))
         {
-            $this->errorMessages[SignupValidator::LASTNAME] = "Seules les lettres sont autorisées.";
+            //$this->errorMessages[SignupForm::LASTNAME] = "Seules les lettres sont autorisées.";
             return false;
         }
 
-        return true;
+        return SignupForm::SUCCESS_SIGNUP;
     }
 
     private function isPasswordValid()
     {
-        if (strlen($this->password) < SignupValidator::MIN_CHAR_PWD)
+        if (strlen($this->password) < SignupForm::MIN_CHAR_PWD)
         {
-            $this->errorMessages[SignupValidator::PASSWORD] = "Le mot de passe doit contenir au moins " . SignupValidator::MIN_CHAR_PWD . " caractères.";
-            return false;
+       /*     $this->errorMessages[SignupForm::PASSWORD] = "Le mot de passe doit contenir au moins " . SignupForm::MIN_CHAR_PWD . " caractères.";*/
+            return SignupForm::ERROR_PASSWORD_LENGTH;
         }
 
-        return true;
+        return SignupForm::SUCCESS_SIGNUP;
     }
 
     private function isConfirmPasswordValid()
     {
-        if (strcmp($this->password, $this->confirmPassword) !== 0)
+        if ($this->password !== $this->confirmPassword)
         {
-            $this->errorMessages[SignupValidator::CONFIRM_PASSWORD] = "Les deux mots de passe sont différents.";
-            return false;
+            //$this->errorMessages[SignupForm::CONFIRM_PASSWORD] = "Les deux mots de passe sont différents.";
+            return SignupForm::ERROR_CONFIRM_PASSWORD_INVALID;
         }
 
-        return true;
+        return SignupForm::SUCCESS_SIGNUP;
     }
 }
 ?>
