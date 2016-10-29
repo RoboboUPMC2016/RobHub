@@ -1,5 +1,5 @@
 <?php
-require_once "DB.php";
+require_once "php/src/database/DB.php";
 
 class SigninForm
 {
@@ -23,7 +23,7 @@ class SigninForm
         {
           session_start();
 
-          require_once "SessionData.php";
+          require_once "php/src/enum/SessionData.php";
           $_SESSION[SessionData::LOGIN] = $result["User_username"];
           $_SESSION[SessionData::FIRSTNAME] = $result["User_firstname"];
           $_SESSION[SessionData::LASTNAME] = $result["User_lastname"];

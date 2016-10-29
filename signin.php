@@ -1,33 +1,33 @@
 <?php
 session_start();
 
-require_once "php/classes/SessionData.php";
+require_once "php/src/enum/SessionData.php";
 
 // Redirect to home page if the user is authenticated
 if (isset($_SESSION[SessionData::LOGIN]))
 {
-  require_once "php/classes/RouteUtils.php";
+  require_once "php/src/util/RouteUtils.php";
   RouteUtils::goToHomePage();
 }
 
-require_once "php/classes/SigninForm.php";
-require_once "php/classes/StringUtils.php";
+require_once "php/src/form/SigninForm.php";
 
 if (isset($_POST[SigninForm::BTN_SIGNIN]))
 {
+  require_once "php/src/util/StringUtils.php";
   $_POST[SigninForm::LOGIN] = StringUtils::clean($_POST[SigninForm::LOGIN]);
   $_POST[SigninForm::PASSWORD] = StringUtils::clean($_POST[SigninForm::PASSWORD]);
 
   $signInForm = new SigninForm($_POST[SigninForm::LOGIN], $_POST[SigninForm::PASSWORD]);
   if ($success = $signInForm->performValidation())
   {
-    require_once "php/classes/RouteUtils.php";
+    require_once "php/src/util/RouteUtils.php";
     RouteUtils::goToHomePage();
   }
 }
 
 
-require_once "php/classes/PageTitle.php";
+require_once "php/src/enum/PageTitle.php";
 // Set title of the page
 $PAGE_TITLE = PageTitle::SIGNIN;
 
@@ -63,36 +63,27 @@ html::tag("div");
         // Form
         html::add_attributes(["class" => "row", "method" => "post"]);
         html::tag("form");
-          // Login input
-          html::add_attribute("class", "col-md-11");
-          html::tag("div");
-            html::add_attribute("class", "form-group");
-            html::tag("div");
-              html::add_attributes(["class" => "form-control", "placeholder" => "Identifiant", "type" => "text", "name" => SigninForm::LOGIN,
-                                    "value" => isset($_POST[SigninForm::LOGIN]) ? $_POST[SigninForm::LOGIN] : ""]);
-              html::single_tag("input");
-            html::close();
-          html::close();
+          require_once "php/src/util/FormWritterUtils.php";
 
-          // Password input
-          html::add_attribute("class", "col-md-11");
-          html::tag("div");
-            html::add_attribute("class", "form-group");
-            html::tag("div");
-              html::add_attributes(["class" => "form-control", "placeholder" => "Mot de passe", "type" => "password", "name" => SigninForm::PASSWORD]);
-              html::single_tag("input");
-            html::close();
-          html::close();
+          // Login
+          html::insert_code(FormWritterUtils::createLabelInput(
+            "Identifiant",
+            "text",
+            SigninForm::LOGIN,
+            isset($_POST[SigninForm::LOGIN]) ? $_POST[SigninForm::LOGIN] : NULL
+          ));
+
+          // Password
+          html::insert_code(FormWritterUtils::createLabelInput(
+            "Mot de passe",
+            "password",
+            SigninForm::PASSWORD,
+            NULL
+          ));
 
           // Submit button
-          html::add_attribute("class", "col-md-12");
-          html::tag("div");
-            html::add_attribute("class", "form-group");
-            html::tag("div");
-              html::add_attributes(["class" => "btn btn-primary", "type" => "submit", "name" => SigninForm::BTN_SIGNIN, "value" => "Se connecter"]);
-              html::single_tag("input");
-            html::close();
-          html::close();
+          html::nl();
+          html::insert_code(FormWritterUtils::createSubmitBtn(SigninForm::BTN_SIGNIN, "Se connecter"));
 
         html::close();
       html::close();

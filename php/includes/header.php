@@ -1,6 +1,6 @@
 <?php
-require_once "php/classes/PageTitle.php";
-require_once "php/classes/SessionData.php";
+require_once "php/src/enum/PageTitle.php";
+require_once "php/src/enum/SessionData.php";
 
 /****************************************
 *  START headeer

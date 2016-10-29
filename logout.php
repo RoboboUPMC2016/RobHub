@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once "php/classes/SessionData";
+require_once "php/src/enum/SessionData.php";
 if (isset($_SESSION[SessionData::LOGIN]))
 {
   // Destory variables of session
@@ -20,6 +20,6 @@ if (isset($_SESSION[SessionData::LOGIN]))
   session_destroy();
 }
 
-require_once "php/classes/RouteUtils.php";
+require_once "php/src/util/RouteUtils.php";
 RouteUtils::goToHomePage();
 ?>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "php/classes/PageTitle.php";
+require_once "php/src/enum/PageTitle.php";
 
 // Set title of the page
 $PAGE_TITLE = PageTitle::HOME;
@@ -23,7 +23,7 @@ html::tag("div");
           $welcomeMsg = "Bienvenue sur le réseau RobHub";
 
           // Add login in welcome message
-          require_once "php/classes/SessionData.php";
+          require_once "php/src/enum/SessionData.php";
           if (isset($_SESSION[SessionData::LOGIN]))
           {
             $welcomeMsg = $welcomeMsg . " " . $_SESSION[SessionData::LOGIN];

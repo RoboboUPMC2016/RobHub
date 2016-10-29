@@ -1,154 +1,152 @@
-<!-- Check form -->
 <?php
-  session_start();
-  if (isset($_SESSION["login"]))
+session_start();
+
+require_once "php/src/enum/SessionData.php";
+
+// Redirect to home page if the user is authenticated
+if (isset($_SESSION[SessionData::LOGIN]))
+{
+  require_once "php/src/util/RouteUtils.php";
+  RouteUtils::goToHomePage();
+}
+
+require_once "php/src/form/SignupForm.php";
+if (isset($_POST[SignupForm::BTN_SIGNUP]))
+{
+  require_once "php/src/util/StringUtils.php";
+
+  $_POST[SignupForm::LOGIN] = StringUtils::clean($_POST[SignupForm::LOGIN]);
+  $_POST[SignupForm::FIRSTNAME] = StringUtils::clean($_POST[SignupForm::FIRSTNAME]);
+  $_POST[SignupForm::LASTNAME] = StringUtils::clean($_POST[SignupForm::LASTNAME]);
+  $_POST[SignupForm::PASSWORD] = StringUtils::clean($_POST[SignupForm::PASSWORD]);
+  $_POST[SignupForm::CONFIRM_PASSWORD] = StringUtils::clean($_POST[SignupForm::CONFIRM_PASSWORD]);
+
+
+  $signupForm = new SignupForm(
+    $_POST[SignupForm::LOGIN],
+    $_POST[SignupForm::FIRSTNAME],
+    $_POST[SignupForm::LASTNAME],
+    $_POST[SignupForm::PASSWORD],
+    $_POST[SignupForm::CONFIRM_PASSWORD]
+  );
+
+  if ($success = $signupForm->performValidation())
   {
-    header("Location: index.php");
-    exit();
+    require_once "php/src/util/RouteUtils.php";
+    RouteUtils::goToHomePage();
   }
+}
 
-  require_once "classes/SignupValidator.php";
-  require_once "functions/functions.php";
+require_once "php/src/enum/PageTitle.php";
+// Set title of the page
+$PAGE_TITLE = PageTitle::SIGNUP;
 
-  if (isset($_POST[SignupValidator::BTN_SIGNUP]))
-  {
-    $_POST[SignupValidator::LOGIN] = cleanInput($_POST[SignupValidator::LOGIN]);
-    $_POST[SignupValidator::FIRSTNAME] = cleanInput($_POST[SignupValidator::FIRSTNAME]);
-    $_POST[SignupValidator::LASTNAME] = cleanInput($_POST[SignupValidator::LASTNAME]);
-    $_POST[SignupValidator::PASSWORD] = cleanInput($_POST[SignupValidator::PASSWORD]);
-    $_POST[SignupValidator::CONFIRM_PASSWORD] = cleanInput($_POST[SignupValidator::CONFIRM_PASSWORD]);
+require_once("php/includes/start-html.php");
 
-    $signupValidator = new SignupValidator($_POST[SignupValidator::LOGIN], $_POST[SignupValidator::FIRSTNAME], $_POST[SignupValidator::LASTNAME],
-                                       $_POST[SignupValidator::PASSWORD], $_POST[SignupValidator::CONFIRM_PASSWORD]);
-    // If form is valid
-    if ($signupValidator->check())
-    {
-      // Insert user in database
-      $stmt = DB::prepare("INSERT INTO User (User_username, User_password, User_firstname, User_lastname) VALUES (?, ?, ?, ?)");
-      if ($stmt->execute([$_POST[SignupValidator::LOGIN], sha1($_POST[SignupValidator::PASSWORD]), $_POST[SignupValidator::FIRSTNAME], $_POST[SignupValidator::LASTNAME]]))
-      {
-        session_start();
-        $_SESSION["login"] = $_POST[SignupValidator::LOGIN];
-        $_SESSION["firstname"] = $_POST[SignupValidator::FIRSTNAME];
-        $_SESSION["lastname"] = $_POST[SignupValidator::LASTNAME];
+/****************************************
+*  START main content
+****************************************/
+html::add_attribute("id", "fh5co-intro-section");
+html::tag("div");
+  html::add_attribute("class", "container");
+  html::tag("div");
 
-        header("Location: index.php");
-        exit();
-      }
-    }
-  }
+    // Singup message
+    html::add_attribute("class", "row");
+    html::tag("div");
+      html::add_attribute("class", "col-md-8 col-md-offset-2 text-center");
+      html::tag("div");
+          html::tag("h2", "Inscription");
+      html::close();
+    html::close();
+
+    html::add_attribute("class", "row");
+    html::tag("div");
+      html::add_attribute("class", "col-md-push-1 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0");
+      html::tag("div");
+
+        // Form
+        html::add_attributes(["class" => "row", "method" => "post"]);
+        html::tag("form");
+          require_once "php/src/util/FormWritterUtils.php";
+
+          // Create error messages for inputs
+          $inputErrorMessages = [
+            SignupForm::LOGIN => NULL,
+            SignupForm::FIRSTNAME => NULL,
+            SignupForm::LASTNAME => NULL,
+            SignupForm::PASSWORD => NULL,
+            SignupForm::CONFIRM_PASSWORD => NULL
+         ];
+
+          if (isset($signupForm))
+          {
+            // Get error messages
+            foreach ($inputErrorMessages as $key => $value)
+            {
+              $inputErrorMessages[$key] = $signupForm->getErrorMessage($key);
+            }
+          }
+
+          // Login
+          html::insert_code(FormWritterUtils::createLabelInput(
+            "Identifiant",
+            "text",
+            SignupForm::LOGIN,
+            isset($_POST[SignupForm::LOGIN]) ? $_POST[SignupForm::LOGIN] : NULL,
+            $inputErrorMessages[SignupForm::LOGIN]
+          ));
+
+          // Firstname
+          html::insert_code(FormWritterUtils::createLabelInput(
+            "Prénom",
+            "text",
+            SignupForm::FIRSTNAME,
+            isset($_POST[SignupForm::FIRSTNAME]) ? $_POST[SignupForm::FIRSTNAME] : NULL,
+            $inputErrorMessages[SignupForm::FIRSTNAME]
+          ));
+
+          // Lastname
+          html::insert_code(FormWritterUtils::createLabelInput(
+            "Nom",
+            "text",
+            SignupForm::LASTNAME,
+            isset($_POST[SignupForm::LASTNAME]) ? $_POST[SignupForm::LASTNAME] : NULL,
+            $inputErrorMessages[SignupForm::LASTNAME]
+          ));
+
+          // Password
+          html::insert_code(FormWritterUtils::createLabelInput(
+            "Mot de passe",
+            "password",
+            SignupForm::PASSWORD,
+            NULL,
+            $inputErrorMessages[SignupForm::PASSWORD]
+          ));
+
+          // Confirm password
+          html::insert_code(FormWritterUtils::createLabelInput(
+            "Confirmation du mot de passe",
+            "password",
+            SignupForm::CONFIRM_PASSWORD,
+            NULL,
+            $inputErrorMessages[SignupForm::CONFIRM_PASSWORD]
+          ));
+
+          // Signup button
+          html::nl();
+          html::insert_code(FormWritterUtils::createSubmitBtn(SignupForm::BTN_SIGNUP, "S'inscrire"));
+
+        html::close();
+      html::close();
+    html::close();
+  html::close();
+  
+  require_once "php/includes/footer.php";
+html::close();
+/****************************************
+*  END main content
+****************************************/
+
+require_once("php/includes/end-html.php");
 ?>
-<!DOCTYPE html>
-  <?php
-    require_once "includes/global.php";
-    $title = $TITLE_SIGNUP;
-    require_once "includes/html_head.php";
-
-  ?>
-  <body>
-    <div id="fspanco-page">
-      <?php include "includes/header.php"; ?>
-
-      <div id="fspanco-intro-section">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-6 col-md-offset-3 text-center fspanco-heading">
-              <h2>Inscription</h2>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-push-1 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
-              <form method="post" class="row">
-                <div class="col-md-11">
-                  <div class="form-group">
-                    <label for="<?php echo SignupValidator::LOGIN; ?>">Identifiant</label>
-                    <input class="form-control" id="<?php echo SignupValidator::LOGIN; ?>" name="<?php echo SignupValidator::LOGIN; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LOGIN])) echo $_POST[SignupValidator::LOGIN]; ?>">
-                    <span class="invalidInput">
-                    <?php
-                      if (isset($signupValidator))
-                      {
-                        echo $signupValidator->getErrorMessage(SignupValidator::LOGIN);
-                      }
-                    ?>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="col-md-11">
-                  <div class="form-group">
-                    <label for="<?php echo SignupValidator::FIRSTNAME; ?>" >Prénom</label>
-                    <input class="form-control" id="<?php echo SignupValidator::FIRSTNAME; ?>" name="<?php echo SignupValidator::FIRSTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::FIRSTNAME])) echo $_POST[SignupValidator::FIRSTNAME]; ?>">
-                    <span class="invalidInput">
-                    <?php
-                      if (isset($signupValidator))
-                      {
-                        echo $signupValidator->getErrorMessage(SignupValidator::FIRSTNAME);
-                      }
-                    ?>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="col-md-11">
-                  <div class="form-group">
-                    <label for="<?php echo SignupValidator::LASTNAME; ?>">Nom</label>
-                    <input class="form-control" id="<?php echo SignupValidator::LASTNAME; ?>" name="<?php echo SignupValidator::LASTNAME; ?>" type="text" value="<?php if (isset($_POST[SignupValidator::LASTNAME])) echo $_POST[SignupValidator::LASTNAME]; ?>">
-                    <span class="invalidInput">
-                    <?php
-                      if (isset($signupValidator))
-                      {
-                        echo $signupValidator->getErrorMessage(SignupValidator::LASTNAME);
-                      }
-                    ?>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="col-md-11">
-                  <div class="form-group">
-                    <label for="<?php echo SignupValidator::PASSWORD; ?>">Mot de passe</label>
-                    <input class="form-control" id="<?php echo SignupValidator::PASSWORD; ?>" name="<?php echo SignupValidator::PASSWORD; ?>" type="password">
-                    <span class="invalidInput">
-                    <?php
-                      if (isset($signupValidator))
-                      {
-                        echo $signupValidator->getErrorMessage(SignupValidator::PASSWORD);
-                      }
-                    ?>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="col-md-11">
-                  <div class="form-group">
-                    <label for="<?php echo SignupValidator::CONFIRM_PASSWORD; ?>">Confirmation de mot de passe</label>
-                    <input class="form-control" id="<?php echo SignupValidator::CONFIRM_PASSWORD; ?>" name="<?php echo SignupValidator::CONFIRM_PASSWORD; ?>" type="password">
-                    <span class="invalidInput">
-                    <?php
-                      if (isset($signupValidator))
-                      {
-                        echo $signupValidator->getErrorMessage(SignupValidator::CONFIRM_PASSWORD);
-                      }
-                    ?>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <input value="S'inscrire" name="<?php echo SignupValidator::BTN_SIGNUP; ?>" class="btn btn-primary" type="submit">
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <?php require_once "includes/footer.php" ?>
-    </div>
-    
-    <?php require_once "includes/scripts_js.php"; ?>
-  </body>
-</html>
