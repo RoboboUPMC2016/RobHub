@@ -38,19 +38,27 @@ html::tag("div");
     html::add_attribute("class", "row");
     html::tag("div");
 
-      // HERE WE SHOULD GET DATA FROM DATABASE
-      $behaviorsLabels = ["Danser", "Parler", "Tourner"];
-      $behaviorsDescs = ["Le robot danse", "Le robot parle", "Le robot tourne"];
-      $behaviorsLogos = ["assets/images/image_4.jpg", "assets/images/image_5.jpg", "assets/images/image_6.jpg"];
+      $behaviorsLabels = [];
+      $behaviorsDescs = [];
+      $behaviorsLogos = [];
+      require_once "php/src/database/DB.php";
 
-      for ($i = 0; $i < 3; ++$i)
+      // Get all behaviors
+      $stmt = DB::run("SELECT * FROM Behavior");
+      while ($row = $stmt->fetch(PDO::FETCH_LAZY))
+      {
+          array_push($behaviorsLabels, $row["Behavior_label"]);
+          array_push($behaviorsDescs, $row["Behavior_description"]);
+      }
+
+      for ($i = 0; $i < count($behaviorsLabels); ++$i)
       {
         html::add_attribute("class", "col-md-4 text-center");
         html::tag("div");
           html::add_attribute("class", "blog-inner");
           html::tag("div");
             // Image
-            html::insert_code('<a href="#"><img class="img-responsive" src="' . $behaviorsLogos[$i] . '" alt="' . $behaviorsLabels[$i] . '"></a>');
+            html::insert_code('<a href="#"><img class="img-responsive" src="assets/images/image_4.jpg" alt="' . $behaviorsLabels[$i] . '"></a>');
 
             // Label + desc
             html::add_attribute("class", "desc");

@@ -52,7 +52,7 @@ class AddBehaviorForm
     {
         if ($this->isLabelValid() && $this->isDescValid() && $this->isfileValid()) {
             // Insert Behavior in DB
-            $stmt = DB::prepare("INSERT INTO Behavior (Behavior_label, Behavior_description, User_username,   Behavior_timestamp) VALUES (?, ?, ?, ?)");
+            $stmt = DB::prepare("INSERT INTO Behavior (Behavior_label, Behavior_description, User_username, Behavior_timestamp) VALUES (?, ?, ?, ?)");
             if ($stmt->execute([$this->label, $this->desc, $this->user, date("Y-m-d H:i:s")]))
             {
               // Create file
