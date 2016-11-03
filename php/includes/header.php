@@ -69,18 +69,6 @@ html::tag("header");
                 }
                 html::tag("a", PageTitle::SIGNIN);
               html::close();
-
-              /****************************************
-              *  Add behavior
-              ****************************************/
-              html::tag("li");
-                html::add_attribute("href", "addbehavior.php");
-                if ($PAGE_TITLE === PageTitle::ADD_BEHAVIOR)
-                {
-                  html::add_attribute("class", "active");
-                }
-                html::tag("a", PageTitle::ADD_BEHAVIOR);
-              html::close();
           }
           else
           {

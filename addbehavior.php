@@ -1,124 +1,135 @@
 <?php
-  session_start();
-/*
-  if (!isset($_SESSION["login"]))
-  {
-    header("Location: index.php");
-    exit();
-  }*/
+session_start();
 
-  require_once "classes/AddBehaviorValidator.php";
-  require_once "functions/functions.php";
+require_once "php/src/enum/SessionData.php";
 
-  if (isset($_POST[AddBehaviorValidator::BTN_ADD]))
-  {
-    $_POST[AddBehaviorValidator::LABEL] = cleanInput($_POST[AddBehaviorValidator::LABEL]);
-    $_POST[AddBehaviorValidator::DESC] = cleanInput($_POST[AddBehaviorValidator::DESC]);
-    $addBehaviorValidator = new AddBehaviorValidator($_POST[AddBehaviorValidator::LABEL], $_POST[AddBehaviorValidator::DESC],
-                                                     $_FILES[AddBehaviorValidator::BEHAVIOR_FILE], "behaviors/");
-    $fileUploaded = $addBehaviorValidator->uploadFile();
-  }
+// Redirect to home page if the user is authenticated
+if (!isset($_SESSION[SessionData::LOGIN]))
+{
+  require_once "php/src/util/RouteUtils.php";
+  RouteUtils::goToHomePage();
+}
 
+require_once "php/src/form/AddBehaviorForm.php";
+if (isset($_POST[AddBehaviorForm::BTN_ADD]))
+{
+  require_once "php/src/util/StringUtils.php";
+
+  $_POST[AddBehaviorForm::LABEL] = StringUtils::clean($_POST[AddBehaviorForm::LABEL]);
+  $_POST[AddBehaviorForm::DESC] = StringUtils::clean($_POST[AddBehaviorForm::DESC]);
+  $addBehaviorForm = new AddBehaviorForm(
+    $_SESSION[SessionData::LOGIN],
+    $_POST[AddBehaviorForm::LABEL],
+    $_POST[AddBehaviorForm::DESC],
+    $_FILES[AddBehaviorForm::BEHAVIOR_FILE]
+  );
+
+  $fileUploadedSuccess = $addBehaviorForm->uploadFile();
+}
+
+require_once "php/src/enum/PageTitle.php";
+
+// Set title of the page
+$PAGE_TITLE = PageTitle::ADD_BEHAVIOR;
+
+require_once("php/includes/start-html.php");
+
+/****************************************
+*  START main content
+****************************************/
+html::add_attribute("id", "fh5co-intro-section");
+html::tag("div");
+  html::add_attribute("class", "container");
+  html::tag("div");
+
+    // Add behavior message
+    html::add_attribute("class", "row");
+    html::tag("div");
+      html::add_attribute("class", "col-md-8 col-md-offset-2 text-center");
+      html::tag("div");
+          html::tag("h2", "Ajouter un comportement");
+
+          if (isset($fileUploadedSuccess))
+          {
+            if ($fileUploadedSuccess)
+            {
+              html::add_attribute("class", "successMsg");
+              html::tag("span", "Le comportement a bien été mis en ligne.");
+            }
+            else
+            {
+              html::add_attribute("class", "errorMsg");
+              html::tag("span", "Un problème inconnu est survenu.");
+            }
+          }
+      html::close();  
+    html::close();
+
+    html::add_attribute("class", "row");
+    html::tag("div");
+      html::add_attribute("class", "col-md-push-1 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0");
+      html::tag("div");
+        // Add behavior form
+        html::add_attributes(["class" => "row", "method" => "post", "enctype" => "multipart/form-data"]);
+        html::tag("form");
+          // Create error messages for inputs
+          $inputErrorMessages = [
+            AddBehaviorForm::LABEL => NULL,
+            AddBehaviorForm::DESC => NULL,
+            AddBehaviorForm::BEHAVIOR_FILE => NULL
+          ];
+
+          if (isset($addBehaviorForm))
+          {
+            // Get error messages
+            foreach ($inputErrorMessages as $key => $value)
+            {
+              $inputErrorMessages[$key] = $addBehaviorForm->getErrorMessage($key);
+            }
+          }
+
+          require_once "php/src/util/HtmlWritterUtils.php";
+
+          // Label
+          html::insert_code(HtmlWritterUtils::createLabelInput(
+            "Label",
+            "text",
+            AddBehaviorForm::LABEL,
+            isset($_POST[AddBehaviorForm::LABEL]) ? $_POST[AddBehaviorForm::LABEL] : NULL,
+            $inputErrorMessages[AddBehaviorForm::LABEL]
+          ));
+
+          // Description
+          html::insert_code(HtmlWritterUtils::createLabelTextArea(
+            "Description",
+            AddBehaviorForm::DESC,
+            isset($_POST[AddBehaviorForm::DESC]) ? $_POST[AddBehaviorForm::DESC] : NULL,
+            $inputErrorMessages[AddBehaviorForm::DESC]
+          ));
+
+          // Add file
+          $ACCEPTED_FILES = "." . AddBehaviorForm::ACCEPTED_FILES;
+          html::insert_code(HtmlWritterUtils::createLabelInputFile(
+            "Fichier du comportement (" . $ACCEPTED_FILES . ")",
+            $ACCEPTED_FILES,
+            AddBehaviorForm::BEHAVIOR_FILE,
+            isset($_POST[AddBehaviorForm::BEHAVIOR_FILE]) ? $_POST[AddBehaviorForm::BEHAVIOR_FILE] : NULL,
+            $inputErrorMessages[AddBehaviorForm::BEHAVIOR_FILE]
+          ));
+
+          // Add behavior button
+          html::nl();
+          html::insert_code(HtmlWritterUtils::createSubmitBtn(AddBehaviorForm::BTN_ADD, "Ajouter"));
+        html::close();
+      html::close();
+    html::close();
+  html::close();
+  
+  require_once "php/includes/footer.php";
+html::close();
+/****************************************
+*  END main content
+****************************************/
+
+require_once("php/includes/end-html.php");
 ?>
-<!DOCTYPE html>
-  <?php 
-    require_once "includes/global.php";
-    $title = $TITLE_ADD_BEHAVIOR;
-    require_once "includes/html_head.php";
-  ?>
-
-  <body> 
-    <div id="fspanco-page">
-      <?php require_once "includes/header.php"; ?>
-
-      <div id="fspanco-intro-section">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 col-md-offset-2 text-center">
-              <h2>Ajouter un comportement</h2>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-push-1 col-sm-12 col-sm-push-0 col-xs-12 col-xs-push-0">
-              <form method="post" enctype="multipart/form-data" class="row">
-                <div class="col-md-11">
-                  <div class="form-group">
-                    <label for="<?php echo AddBehaviorValidator::LABEL; ?>">Label</label>
-                    <input class="form-control" id="<?php echo AddBehaviorValidator::LABEL; ?>" name="<?php echo AddBehaviorValidator::LABEL; ?>" type="text"
-                           value="<?php
-                           if (isset($_POST[AddBehaviorValidator::LABEL]) && !$fileUploaded)
-                           {
-                             echo $_POST[AddBehaviorValidator::LABEL];
-                           }
-                    ?>">
-                    <span class="invalidInput">
-                    <?php
-                      if (isset($addBehaviorValidator))
-                      {
-                        echo $addBehaviorValidator->getErrorMessage(AddBehaviorValidator::LABEL);
-                      }
-                    ?>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="col-md-11">
-                  <div class="form-group">
-                    <label for="<?php echo AddBehaviorValidator::DESC; ?>">Description</label>
-                    <textarea class="form-control" id="<?php echo AddBehaviorValidator::DESC; ?>" name="<?php echo AddBehaviorValidator::DESC; ?>"><?php
-                      if (isset($_POST[AddBehaviorValidator::DESC]) && !$fileUploaded)
-                      {
-                        echo $_POST[AddBehaviorValidator::DESC];
-                      }
-                    ?></textarea>
-                    <span class="invalidInput">
-                    <?php
-                      if (isset($addBehaviorValidator))
-                      {
-                        echo $addBehaviorValidator->getErrorMessage(AddBehaviorValidator::DESC);
-                      }
-                    ?>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="col-md-11">
-                  <div class="form-group">
-                    <label for="<?php echo AddBehaviorValidator::BEHAVIOR_FILE; ?>">Fichier du comportement</label>
-                    <input accept=".java" id="<?php echo AddBehaviorValidator::BEHAVIOR_FILE; ?>" name="<?php echo AddBehaviorValidator::BEHAVIOR_FILE; ?>" type="file">
-                    <?php
-                      if (isset($addBehaviorValidator))
-                      {
-                        if ($fileUploaded)
-                        {
-                          echo '<span class="success">Le comportement a bien été mis en ligne.</span>';
-                        }
-                        else
-                        {
-                          echo '<span class="invalidInput"' . $addBehaviorValidator->getErrorMessage(AddBehaviorValidator::BEHAVIOR_FILE) . '</span>';
-                        }
-                      }
-                    ?>
-                  </div>
-                </div>
-
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <input value="Ajouter" name="<?php echo AddBehaviorValidator::BTN_ADD; ?>" class="btn btn-primary" type="submit">
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      
-      <?php require_once "includes/footer.php" ?>
-    </div>
-  
-  
-    <?php require_once "includes/scripts_js.php"; ?>
-  </body>
-</html>

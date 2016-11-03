@@ -68,7 +68,7 @@ html::tag("div");
         // Form
         html::add_attributes(["class" => "row", "method" => "post"]);
         html::tag("form");
-          require_once "php/src/util/FormWritterUtils.php";
+          require_once "php/src/util/HtmlWritterUtils.php";
 
           // Create error messages for inputs
           $inputErrorMessages = [
@@ -89,7 +89,7 @@ html::tag("div");
           }
 
           // Login
-          html::insert_code(FormWritterUtils::createLabelInput(
+          html::insert_code(HtmlWritterUtils::createLabelInput(
             "Identifiant",
             "text",
             SignupForm::LOGIN,
@@ -98,7 +98,7 @@ html::tag("div");
           ));
 
           // Firstname
-          html::insert_code(FormWritterUtils::createLabelInput(
+          html::insert_code(HtmlWritterUtils::createLabelInput(
             "Prénom",
             "text",
             SignupForm::FIRSTNAME,
@@ -107,7 +107,7 @@ html::tag("div");
           ));
 
           // Lastname
-          html::insert_code(FormWritterUtils::createLabelInput(
+          html::insert_code(HtmlWritterUtils::createLabelInput(
             "Nom",
             "text",
             SignupForm::LASTNAME,
@@ -116,7 +116,7 @@ html::tag("div");
           ));
 
           // Password
-          html::insert_code(FormWritterUtils::createLabelInput(
+          html::insert_code(HtmlWritterUtils::createLabelInput(
             "Mot de passe",
             "password",
             SignupForm::PASSWORD,
@@ -125,7 +125,7 @@ html::tag("div");
           ));
 
           // Confirm password
-          html::insert_code(FormWritterUtils::createLabelInput(
+          html::insert_code(HtmlWritterUtils::createLabelInput(
             "Confirmation du mot de passe",
             "password",
             SignupForm::CONFIRM_PASSWORD,
@@ -135,8 +135,7 @@ html::tag("div");
 
           // Signup button
           html::nl();
-          html::insert_code(FormWritterUtils::createSubmitBtn(SignupForm::BTN_SIGNUP, "S'inscrire"));
-
+          html::insert_code(HtmlWritterUtils::createSubmitBtn(SignupForm::BTN_SIGNUP, "S'inscrire"));
         html::close();
       html::close();
     html::close();

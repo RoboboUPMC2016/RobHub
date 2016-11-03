@@ -49,7 +49,7 @@ html::tag("div");
           html::tag("h2", "Connexion");
           if (isset($success) && !$success)
           {
-            html::add_attribute("class", "invalidInput");
+            html::add_attribute("class", "errorMsg");
             html::tag("span", "Identifiant ou mot de passe incorect.");
           }
       html::close();
@@ -63,10 +63,10 @@ html::tag("div");
         // Form
         html::add_attributes(["class" => "row", "method" => "post"]);
         html::tag("form");
-          require_once "php/src/util/FormWritterUtils.php";
+          require_once "php/src/util/HtmlWritterUtils.php";
 
           // Login
-          html::insert_code(FormWritterUtils::createLabelInput(
+          html::insert_code(HtmlWritterUtils::createLabelInput(
             "Identifiant",
             "text",
             SigninForm::LOGIN,
@@ -74,7 +74,7 @@ html::tag("div");
           ));
 
           // Password
-          html::insert_code(FormWritterUtils::createLabelInput(
+          html::insert_code(HtmlWritterUtils::createLabelInput(
             "Mot de passe",
             "password",
             SigninForm::PASSWORD,
@@ -83,7 +83,7 @@ html::tag("div");
 
           // Submit button
           html::nl();
-          html::insert_code(FormWritterUtils::createSubmitBtn(SigninForm::BTN_SIGNIN, "Se connecter"));
+          html::insert_code(HtmlWritterUtils::createSubmitBtn(SigninForm::BTN_SIGNIN, "Se connecter"));
 
         html::close();
       html::close();
