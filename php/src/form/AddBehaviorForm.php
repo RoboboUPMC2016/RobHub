@@ -1,20 +1,24 @@
 <?php
 require_once "php/src/database/DB.php";
+require_once "vendor/autoload.php";
 
 class AddBehaviorForm
 {
-    private $user;
     private $label;
     private $desc;
     private $file;
-    private $targetFile;
 
     const LABEL = "label";
     const DESC = "description";
     const BEHAVIOR_FILE = "behavior-file";
     const BTN_ADD = "btn-add";
 
-    const TARGET_DIR = "behaviors/";
+
+    const BUFFER = 128;
+    const PROTOCOL = "tcp";
+    const ADDRESS = "localhost";
+    const PORT = "5668";
+    private static $socketFactory = null;
 
     private $errorMessages;
 
@@ -25,22 +29,23 @@ class AddBehaviorForm
 
     const ACCEPTED_FILES = "java";
 
-    public function __construct($user, $label, $desc, $file)
+    public function __construct($label, $desc, $file)
     {
-        $this->user = $user;
         $this->label = $label;
         $this->desc = $desc;
         $this->file = $file;
 
-        // Name file with user and label and add timestamp to not erase other files
-        // File name example : user-file12346898956
-        $this->targetFile = AddBehaviorForm::TARGET_DIR . $user . "-" . basename($label) . time() .
-                            "." . AddBehaviorForm::ACCEPTED_FILES;
         $this->errorMessages = [
-            AddBehaviorForm::LABEL => "",
-            AddBehaviorForm::DESC => "",
-            AddBehaviorForm::BEHAVIOR_FILE => ""
+            self::LABEL => null,
+            self::DESC => null,
+            self::BEHAVIOR_FILE => null
         ];
+
+        // Only init socket factory once
+        if (self::$socketFactory === null)
+        {
+            self::$socketFactory = new \Socket\Raw\Factory();
+        }
     }
 
     public function getErrorMessage($input)
@@ -48,34 +53,82 @@ class AddBehaviorForm
         return $this->errorMessages[$input];
     }
 
-    public function uploadFile()
+    public function performValidation()
     {
-        if ($this->isLabelValid() && $this->isDescValid() && $this->isfileValid()) {
-            // Insert Behavior in DB
-            $stmt = DB::prepare("INSERT INTO Behavior (Behavior_label, Behavior_description, User_username, Behavior_timestamp) VALUES (?, ?, ?, ?)");
-            if ($stmt->execute([$this->label, $this->desc, $this->user, date("Y-m-d H:i:s")]))
-            {
-              // Create file
-              return move_uploaded_file($this->file["tmp_name"], $this->targetFile);
-            }
+        // Check if input are OK
+        if ($this->isLabelValid() && $this->isDescValid() && $this->isfileValid())
+        {
+            // Return dex content
+            return $this->javaToDex();
         }
 
-        return false;
+        return null;
+    }
+
+    private function javaToDex()
+    {
+        $dexFileContent = null;
+
+        // Create socket
+        $socket = self::$socketFactory->createClient(self::PROTOCOL . "://" . self::ADDRESS . ":" . self::PORT);
+
+        // Send number of files (normally it should always be 1)
+        $socket->write("1\n");
+
+        // Check if number of file is valid (should always be OK)
+        if (intval($socket->read(self::BUFFER)) === -1)
+        {
+            $this->errorMessages[self::BEHAVIOR_FILE] = "Le nombre de fichier est invalide.";
+            $socket->close();
+            return false;
+        }
+
+        // Send file name and file size
+        $socket->write($this->file["name"] . "\n");
+        $socket->write($this->file["size"] . "\n");
+
+        // Check if file is valid
+        if (intval($socket->read(self::BUFFER)) === -1)
+        {
+            $this->errorMessages[self::BEHAVIOR_FILE] = "Le nom ou la taille du fichier est invalide.";
+            $socket->close();
+            return false;
+        }
+
+        // Send java source code
+        $sourceCode = file_get_contents($this->file["tmp_name"], FILE_USE_INCLUDE_PATH);
+        $socket->write($sourceCode . "\n");
+
+        // Check if compilation of source code has succeeded
+        if (intval($socket->read(self::BUFFER)) === -1)
+        {
+            $this->errorMessages[self::BEHAVIOR_FILE] = "La compilation du fichier java a échoué.";
+            $socket->close();
+            return false;
+        }
+
+        // Get size and content of the dex file
+        $dexFileSize = intval($socket->read(self::BUFFER));
+        $dexFileContent = $socket->read($dexFileSize);
+
+        $socket->close();
+
+        return $dexFileContent;
     }
 
     private function isLabelValid()
     {
         // Check min length
-        if (strlen($this->label) < AddBehaviorForm::MIN_CHAR_LABEL)
+        if (strlen($this->label) < self::MIN_CHAR_LABEL)
         {
-            $this->errorMessages[AddBehaviorForm::LABEL] = "Le label doit contenir au moins " . AddBehaviorForm::MIN_CHAR_LABEL . " caractères.";
+            $this->errorMessages[self::LABEL] = "Le label doit contenir au moins " . self::MIN_CHAR_LABEL . " caractères.";
             return false;
         }
 
         // Check format
-        if (!preg_match(AddBehaviorForm::LABEL_REGEX, $this->label))
+        if (!preg_match(self::LABEL_REGEX, $this->label))
         {
-            $this->errorMessages[AddBehaviorForm::LABEL] = "Seules les lettres sont autorisées.";
+            $this->errorMessages[self::LABEL] = "Seules les lettres sont autorisées.";
             return false;
         }
 
@@ -85,9 +138,9 @@ class AddBehaviorForm
     private function isDescValid()
     {
         // Check min length
-        if (strlen($this->desc) < AddBehaviorForm::MIN_CHAR_DESC)
+        if (strlen($this->desc) < self::MIN_CHAR_DESC)
         {
-            $this->errorMessages[AddBehaviorForm::DESC] = "La description doit contenir au moins " . AddBehaviorForm::MIN_CHAR_DESC . " caractères.";
+            $this->errorMessages[self::DESC] = "La description doit contenir au moins " . self::MIN_CHAR_DESC . " caractères.";
             return false;
         }
 
@@ -99,14 +152,14 @@ class AddBehaviorForm
         // Check if a file has been selected
         if (!isset($this->file) || $this->file["error"] == UPLOAD_ERR_NO_FILE)
         {
-            $this->errorMessages[AddBehaviorForm::BEHAVIOR_FILE] = "Aucun fichier n'a été sélectionné.";
+            $this->errorMessages[self::BEHAVIOR_FILE] = "Aucun fichier n'a été sélectionné.";
             return false;
         }
 
-        // Ttest if it is a java file, maybe we need to do a stronger verification
-        if (strcasecmp(pathinfo($this->targetFile, PATHINFO_EXTENSION), AddBehaviorForm::ACCEPTED_FILES) !== 0)
+        // Test if it is a java file, maybe we need to do a stronger verification
+        if (strcasecmp(pathinfo($this->file["name"], PATHINFO_EXTENSION), self::ACCEPTED_FILES) !== 0)
         {
-            $this->errorMessages[AddBehaviorForm::BEHAVIOR_FILE] = "Le fichier doit être de type ." . AddBehaviorForm::ACCEPTED_FILES . ".";
+            $this->errorMessages[self::BEHAVIOR_FILE] = "Le fichier doit être de type ." . self::ACCEPTED_FILES . ".";
             return false;
         }
 

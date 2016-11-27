@@ -18,13 +18,42 @@ if (isset($_POST[AddBehaviorForm::BTN_ADD]))
   $_POST[AddBehaviorForm::LABEL] = StringUtils::clean($_POST[AddBehaviorForm::LABEL]);
   $_POST[AddBehaviorForm::DESC] = StringUtils::clean($_POST[AddBehaviorForm::DESC]);
   $addBehaviorForm = new AddBehaviorForm(
-    $_SESSION[SessionData::LOGIN],
     $_POST[AddBehaviorForm::LABEL],
     $_POST[AddBehaviorForm::DESC],
     $_FILES[AddBehaviorForm::BEHAVIOR_FILE]
   );
 
-  $fileUploadedSuccess = $addBehaviorForm->uploadFile();
+  $dexContent = $addBehaviorForm->performValidation();
+  if ($dexContent !== null)
+  {
+    require_once "php/src/database/entity/Behavior.php";
+    $behavior = new Behavior($_POST[AddBehaviorForm::LABEL], $_POST[AddBehaviorForm::DESC], $_SESSION[SessionData::LOGIN]);
+
+    require_once "php/src/database/dao/BehaviorDao.php";
+    $behaviorDao = new BehaviorDao();
+    $behaviorId = $behaviorDao->add($behavior);
+
+    if ($behaviorId !== -1)
+    {
+      require_once "php/src/util/BehaviorFileWriter.php";
+
+      // Create java file
+      BehaviorFileWriter::createPostFile($behaviorId, $_FILES[AddBehaviorForm::BEHAVIOR_FILE]);
+
+      // Create dex file
+      BehaviorFileWriter::createDexFile(
+        $behaviorId,
+        basename($_FILES[AddBehaviorForm::BEHAVIOR_FILE]["name"], AddBehaviorForm::BEHAVIOR_FILE),
+        $dexContent
+      );
+
+      $fileUploadedSuccess = true;
+    }
+    else 
+    {
+      $fileUploadedSuccess = false;
+    }
+  }
 }
 
 require_once "php/src/enum/PageTitle.php";
@@ -74,9 +103,9 @@ html::tag("div");
         html::tag("form");
           // Create error messages for inputs
           $inputErrorMessages = [
-            AddBehaviorForm::LABEL => NULL,
-            AddBehaviorForm::DESC => NULL,
-            AddBehaviorForm::BEHAVIOR_FILE => NULL
+            AddBehaviorForm::LABEL => null,
+            AddBehaviorForm::DESC => null,
+            AddBehaviorForm::BEHAVIOR_FILE => null
           ];
 
           if (isset($addBehaviorForm))
@@ -95,7 +124,7 @@ html::tag("div");
             "Label",
             "text",
             AddBehaviorForm::LABEL,
-            isset($_POST[AddBehaviorForm::LABEL]) ? $_POST[AddBehaviorForm::LABEL] : NULL,
+            isset($_POST[AddBehaviorForm::LABEL]) ? $_POST[AddBehaviorForm::LABEL] : null,
             $inputErrorMessages[AddBehaviorForm::LABEL]
           ));
 
@@ -103,7 +132,7 @@ html::tag("div");
           html::insert_code(HtmlWritterUtils::createLabelTextArea(
             "Description",
             AddBehaviorForm::DESC,
-            isset($_POST[AddBehaviorForm::DESC]) ? $_POST[AddBehaviorForm::DESC] : NULL,
+            isset($_POST[AddBehaviorForm::DESC]) ? $_POST[AddBehaviorForm::DESC] : null,
             $inputErrorMessages[AddBehaviorForm::DESC]
           ));
 
@@ -113,7 +142,7 @@ html::tag("div");
             "Fichier du comportement (" . $ACCEPTED_FILES . ")",
             $ACCEPTED_FILES,
             AddBehaviorForm::BEHAVIOR_FILE,
-            isset($_POST[AddBehaviorForm::BEHAVIOR_FILE]) ? $_POST[AddBehaviorForm::BEHAVIOR_FILE] : NULL,
+            isset($_POST[AddBehaviorForm::BEHAVIOR_FILE]) ? $_POST[AddBehaviorForm::BEHAVIOR_FILE] : null,
             $inputErrorMessages[AddBehaviorForm::BEHAVIOR_FILE]
           ));
 
