@@ -1,37 +1,55 @@
 <?php
 session_start();
 
-require_once "php/src/enum/SessionData.php";
+require_once __DIR__ . "/php/src/enum/SessionData.php";
 
 // Redirect to home page if the user is authenticated
 if (isset($_SESSION[SessionData::LOGIN]))
 {
-  require_once "php/src/util/RouteUtils.php";
+  require_once __DIR__ . "/php/src/util/RouteUtils.php";
   RouteUtils::goToHomePage();
 }
 
-require_once "php/src/form/SigninForm.php";
+require_once __DIR__ . "/php/src/form/SigninForm.php";
 
+// Sign in btn pressed
 if (isset($_POST[SigninForm::BTN_SIGNIN]))
 {
-  require_once "php/src/util/StringUtils.php";
+  require_once __DIR__ . "/php/src/util/StringUtils.php";
+  // Clean inputs
   $_POST[SigninForm::LOGIN] = StringUtils::clean($_POST[SigninForm::LOGIN]);
   $_POST[SigninForm::PASSWORD] = StringUtils::clean($_POST[SigninForm::PASSWORD]);
 
+  // Create form
   $signInForm = new SigninForm($_POST[SigninForm::LOGIN], $_POST[SigninForm::PASSWORD]);
-  if ($success = $signInForm->performValidation())
+
+  // Check if user found
+  $user = $signInForm->performValidation();
+  if ($user !== null)
   {
-    require_once "php/src/util/RouteUtils.php";
+    session_start();
+
+    require_once __DIR__ . "/php/src/enum/SessionData.php";
+    // Create session value
+    $_SESSION[SessionData::LOGIN] = $user->username;
+    $_SESSION[SessionData::FIRSTNAME] = $user->firstname;
+    $_SESSION[SessionData::LASTNAME] = $user->lastname;
+
+    require_once __DIR__ . "/php/src/util/RouteUtils.php";
     RouteUtils::goToHomePage();
+  }
+  else
+  {
+    $success = false;
   }
 }
 
 
-require_once "php/src/enum/PageTitle.php";
+require_once __DIR__ . "/php/src/enum/PageTitle.php";
 // Set title of the page
 $PAGE_TITLE = PageTitle::SIGNIN;
 
-require_once("php/includes/start-html.php");
+require_once __DIR__ . "/php/includes/start-html.php";
 
 /****************************************
 *  START main content
@@ -47,6 +65,8 @@ html::tag("div");
       html::add_attribute("class", "col-md-8 col-md-offset-2 text-center");
       html::tag("div");
           html::tag("h2", "Connexion");
+
+          // Invalid id/pass
           if (isset($success) && !$success)
           {
             html::add_attribute("class", "errorMsg");
@@ -63,14 +83,14 @@ html::tag("div");
         // Form
         html::add_attributes(["class" => "row", "method" => "post"]);
         html::tag("form");
-          require_once "php/src/util/HtmlWritterUtils.php";
+          require_once __DIR__ . "/php/src/util/HtmlWritterUtils.php";
 
           // Login
           html::insert_code(HtmlWritterUtils::createLabelInput(
             "Identifiant",
             "text",
             SigninForm::LOGIN,
-            isset($_POST[SigninForm::LOGIN]) ? $_POST[SigninForm::LOGIN] : NULL
+            isset($_POST[SigninForm::LOGIN]) ? $_POST[SigninForm::LOGIN] : null
           ));
 
           // Password
@@ -78,7 +98,7 @@ html::tag("div");
             "Mot de passe",
             "password",
             SigninForm::PASSWORD,
-            NULL
+            null
           ));
 
           // Submit button
@@ -90,11 +110,11 @@ html::tag("div");
     html::close();
   html::close();
   
-  require_once "php/includes/footer.php";
+  require_once __DIR__ . "/php/includes/footer.php";
 html::close();
 /****************************************
 *  END main content
 ****************************************/
 
-require_once("php/includes/end-html.php");
+require_once __DIR__ . "/php/includes/end-html.php";
 ?>
