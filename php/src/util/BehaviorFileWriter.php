@@ -5,29 +5,29 @@ class BehaviorFileWriter
     
     public static function createPostFile($id, $postFile)
     {
-    	$targetDirId = BehaviorFileWriter::createTargetDirId($id);
+    	$targetDirId = self::createTargetDirId($id);
 
 		// Copy post file to behaviors/number_id/
-    	move_uploaded_file($this->file["tmp_name"], $targetDirId . basename($this->file["name"]));
+    	move_uploaded_file($postFile["tmp_name"], $targetDirId . basename($postFile["name"]));
     }
 
     public static function createDexFile($id, $fileName, $dexContent)
     {
-    	$targetDirId = BehaviorFileWriter::createTargetDirId($id);
+    	$targetDirId = self::createTargetDirId($id);
 
 		// Create dex file to behaviors/number_id/
-    	file_put_contents($targetDirId . $fileName . ".dex", $buf4);
+    	file_put_contents($targetDirId . $fileName . ".dex", $dexContent);
     }
 
     private static function createTargetDirId($id)
     {
     	// Create path => behaviors/number_id/
-    	$targetDirId = BehaviorFileWriter::TARGET_DIRECTORY . $id . "/";
+    	$targetDirId = self::TARGET_DIR . $id . "/";
 
     	// Create folder if it doesn't exists
-    	if (!is_dir($this->targetDirId))
+    	if (!is_dir($targetDirId))
     	{
-    		mkdir($this->targetDirId);
+    		mkdir($targetDirId);
 		}
 
 		return $targetDirId;

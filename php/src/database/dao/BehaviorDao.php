@@ -4,10 +4,10 @@ require_once "php/src/database/entity/Behavior.php";
 
 class BehaviorDao
 {  
-    public static function add($behavior)
+    public static function add($label, $description, $username)
     {
       $stmt = DB::prepare("INSERT INTO Behavior (Behavior_label, Behavior_description, User_username, Behavior_timestamp) VALUES (?, ?, ?, ?)");
-      if ($stmt->execute([$behavior->label, $behavior->description, $behavior->username, date("Y-m-d H:i:s")]))
+      if ($stmt->execute([$label, $description, $username, date("Y-m-d H:i:s")]))
       {
         return DB::lastInsertId();
       }

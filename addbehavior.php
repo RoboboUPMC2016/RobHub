@@ -11,28 +11,34 @@ if (!isset($_SESSION[SessionData::LOGIN]))
 }
 
 require_once "php/src/form/AddBehaviorForm.php";
+
+// Button add pressed
 if (isset($_POST[AddBehaviorForm::BTN_ADD]))
 {
   require_once "php/src/util/StringUtils.php";
 
+  // Clean input
   $_POST[AddBehaviorForm::LABEL] = StringUtils::clean($_POST[AddBehaviorForm::LABEL]);
   $_POST[AddBehaviorForm::DESC] = StringUtils::clean($_POST[AddBehaviorForm::DESC]);
+
+  // Create form checker
   $addBehaviorForm = new AddBehaviorForm(
     $_POST[AddBehaviorForm::LABEL],
     $_POST[AddBehaviorForm::DESC],
     $_FILES[AddBehaviorForm::BEHAVIOR_FILE]
   );
 
+  // Get dex content
   $dexContent = $addBehaviorForm->performValidation();
+  // Java file uploaded is ok : dex content is not null
   if ($dexContent !== null)
   {
-    require_once "php/src/database/entity/Behavior.php";
-    $behavior = new Behavior($_POST[AddBehaviorForm::LABEL], $_POST[AddBehaviorForm::DESC], $_SESSION[SessionData::LOGIN]);
-
     require_once "php/src/database/dao/BehaviorDao.php";
+    // Insert new Behavior in DB
     $behaviorDao = new BehaviorDao();
-    $behaviorId = $behaviorDao->add($behavior);
+    $behaviorId = strval($behaviorDao->add($_POST[AddBehaviorForm::LABEL], $_POST[AddBehaviorForm::DESC], $_SESSION[SessionData::LOGIN]));
 
+    // Insert has succeeded
     if ($behaviorId !== -1)
     {
       require_once "php/src/util/BehaviorFileWriter.php";
@@ -43,7 +49,7 @@ if (isset($_POST[AddBehaviorForm::BTN_ADD]))
       // Create dex file
       BehaviorFileWriter::createDexFile(
         $behaviorId,
-        basename($_FILES[AddBehaviorForm::BEHAVIOR_FILE]["name"], AddBehaviorForm::BEHAVIOR_FILE),
+        basename($_FILES[AddBehaviorForm::BEHAVIOR_FILE]["name"], "." . AddBehaviorForm::ACCEPTED_FILES),
         $dexContent
       );
 
@@ -80,16 +86,18 @@ html::tag("div");
 
           if (isset($fileUploadedSuccess))
           {
-            if ($fileUploadedSuccess)
-            {
-              html::add_attribute("class", "successMsg");
-              html::tag("span", "Le comportement a bien été mis en ligne.");
-            }
-            else
-            {
-              html::add_attribute("class", "errorMsg");
-              html::tag("span", "Un problème inconnu est survenu.");
-            }
+              // Upload has succeeded
+              if ($fileUploadedSuccess)
+              {
+                html::add_attribute("class", "successMsg");
+                html::tag("span", "Le comportement a bien été mis en ligne.");
+              }
+              // Upload has failed
+              else
+              {
+                html::add_attribute("class", "errorMsg");
+                html::tag("span", "Le comportement n'a pas pu être mis en ligne.");
+              }
           }
       html::close();  
     html::close();
