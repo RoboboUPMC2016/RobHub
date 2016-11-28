@@ -6,7 +6,7 @@ class DB
     protected function __construct() {}
     protected function __clone() {}
 
-    const CONFIG_PATH = "config/config-database.json";
+    const CONFIG_PATH = __DIR__ . "/../../../config/config-database.json";
     const HOST = "host";
     const NAME = "dbname";
     const USER = "user";

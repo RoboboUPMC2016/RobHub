@@ -1,6 +1,6 @@
 <?php
-require_once "php/src/database/DB.php";
-require_once "php/src/database/entity/Behavior.php";
+require_once __DIR__ . "/../DB.php";
+require_once __DIR__ . "/../entity/Behavior.php";
 
 class BehaviorDao
 {  
