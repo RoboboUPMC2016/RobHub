@@ -41,13 +41,13 @@ if (isset($_POST[AddBehaviorForm::BTN_ADD]))
     // Insert has succeeded
     if ($behaviorId !== -1)
     {
-      require_once __DIR__ . "/php/src/util/BehaviorFileWriter.php";
+      require_once __DIR__ . "/php/src/util/BehaviorFileUtils.php";
 
       // Create java file
-      BehaviorFileWriter::createPostFile($behaviorId, $_FILES[AddBehaviorForm::BEHAVIOR_FILE]);
+      BehaviorFileUtils::createPostFile($behaviorId, $_FILES[AddBehaviorForm::BEHAVIOR_FILE]);
 
       // Create dex file
-      BehaviorFileWriter::createDexFile(
+      BehaviorFileUtils::createDexFile(
         $behaviorId,
         basename($_FILES[AddBehaviorForm::BEHAVIOR_FILE]["name"], "." . AddBehaviorForm::ACCEPTED_FILES),
         $dexContent

@@ -1,8 +1,8 @@
 <?php
-class BehaviorFileWriter
+class BehaviorFileUtils
 {
     const TARGET_BEHAVIORS = "behaviors/";
-    const TARGET_DIR = __DIR__ . "/../../../" . self::TARGET_BEHAVIORS;
+    //const TARGET_DIR = __DIR__ . "/../../../" . self::TARGET_BEHAVIORS;
     const DEX_EXT = ".dex";
     
     public static function createPostFile($id, $postFile)
@@ -36,7 +36,7 @@ class BehaviorFileWriter
 
     private static function targetDirIdPath($id)
     {
-      return self::TARGET_DIR . $id . "/";
+      return __DIR__ . "/../../../" . self::TARGET_BEHAVIORS . $id . "/";
     }
 
     private static function createTargetDirId($id)
