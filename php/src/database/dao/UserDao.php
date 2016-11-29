@@ -9,10 +9,10 @@ class UserDao
       $stmt = DB::prepare("INSERT INTO User (User_username, User_password, User_firstname, User_lastname) VALUES (?, ?, ?, ?)");
       if ($stmt->execute([$username, $password, $firstname, $lastname]))
       {
-        return $username;
+        return true;
       }
 
-      return null;
+      return false;
     }
 
     public static function get($login, $password)
@@ -28,6 +28,12 @@ class UserDao
       }
       
       return null;
+    }
+
+    public static function find($login)
+    {
+      $result = DB::run("SELECT * FROM User WHERE User_username=?", [$login])->fetchColumn();
+      return $result;
     }
 }
 ?>

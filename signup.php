@@ -1,27 +1,29 @@
 <?php
 session_start();
 
-require_once "php/src/enum/SessionData.php";
+require_once __DIR__ . "/php/src/enum/SessionData.php";
 
 // Redirect to home page if the user is authenticated
 if (isset($_SESSION[SessionData::LOGIN]))
 {
-  require_once "php/src/util/RouteUtils.php";
+  require_once __DIR__ . "/php/src/util/RouteUtils.php";
   RouteUtils::goToHomePage();
 }
 
-require_once "php/src/form/SignupForm.php";
+require_once __DIR__ . "/php/src/form/SignupForm.php";
+// Btn create account pressed
 if (isset($_POST[SignupForm::BTN_SIGNUP]))
 {
-  require_once "php/src/util/StringUtils.php";
+  require_once __DIR__ . "/php/src/util/StringUtils.php";
 
+  // Clean input
   $_POST[SignupForm::LOGIN] = StringUtils::clean($_POST[SignupForm::LOGIN]);
   $_POST[SignupForm::FIRSTNAME] = StringUtils::clean($_POST[SignupForm::FIRSTNAME]);
   $_POST[SignupForm::LASTNAME] = StringUtils::clean($_POST[SignupForm::LASTNAME]);
   $_POST[SignupForm::PASSWORD] = StringUtils::clean($_POST[SignupForm::PASSWORD]);
   $_POST[SignupForm::CONFIRM_PASSWORD] = StringUtils::clean($_POST[SignupForm::CONFIRM_PASSWORD]);
 
-
+  // Create form
   $signupForm = new SignupForm(
     $_POST[SignupForm::LOGIN],
     $_POST[SignupForm::FIRSTNAME],
@@ -30,18 +32,35 @@ if (isset($_POST[SignupForm::BTN_SIGNUP]))
     $_POST[SignupForm::CONFIRM_PASSWORD]
   );
 
-  if ($success = $signupForm->performValidation())
+  // Check inputs
+  if ($signupForm->performValidation())
   {
-    require_once "php/src/util/RouteUtils.php";
-    RouteUtils::goToHomePage();
+    require_once __DIR__ . "/php/src/database/dao/UserDao.php";
+    // Insert user in database
+    if (UserDao::add(
+      $_POST[SignupForm::LOGIN],
+      sha1($_POST[SignupForm::PASSWORD]),
+      $_POST[SignupForm::FIRSTNAME],
+      $_POST[SignupForm::LASTNAME]
+    ))
+    {
+      // Create session
+      session_start();
+      $_SESSION["login"] = $_POST[SignupForm::LOGIN];
+      $_SESSION["firstname"] = $_POST[SignupForm::FIRSTNAME];
+      $_SESSION["lastname"] = $_POST[SignupForm::LASTNAME];
+
+      require_once __DIR__ . "/php/src/util/RouteUtils.php";
+      RouteUtils::goToHomePage();
+    }
   }
 }
 
-require_once "php/src/enum/PageTitle.php";
+require_once __DIR__ . "/php/src/enum/PageTitle.php";
 // Set title of the page
 $PAGE_TITLE = PageTitle::SIGNUP;
 
-require_once("php/includes/start-html.php");
+require_once __DIR__ . "/php/includes/start-html.php";
 
 /****************************************
 *  START main content
@@ -68,15 +87,15 @@ html::tag("div");
         // Form
         html::add_attributes(["class" => "row", "method" => "post"]);
         html::tag("form");
-          require_once "php/src/util/HtmlWritterUtils.php";
+          require_once __DIR__ . "/php/src/util/HtmlWritterUtils.php";
 
           // Create error messages for inputs
           $inputErrorMessages = [
-            SignupForm::LOGIN => NULL,
-            SignupForm::FIRSTNAME => NULL,
-            SignupForm::LASTNAME => NULL,
-            SignupForm::PASSWORD => NULL,
-            SignupForm::CONFIRM_PASSWORD => NULL
+            SignupForm::LOGIN => null,
+            SignupForm::FIRSTNAME => null,
+            SignupForm::LASTNAME => null,
+            SignupForm::PASSWORD => null,
+            SignupForm::CONFIRM_PASSWORD => null
          ];
 
           if (isset($signupForm))
@@ -93,7 +112,7 @@ html::tag("div");
             "Identifiant",
             "text",
             SignupForm::LOGIN,
-            isset($_POST[SignupForm::LOGIN]) ? $_POST[SignupForm::LOGIN] : NULL,
+            isset($_POST[SignupForm::LOGIN]) ? $_POST[SignupForm::LOGIN] : null,
             $inputErrorMessages[SignupForm::LOGIN]
           ));
 
@@ -102,7 +121,7 @@ html::tag("div");
             "Prénom",
             "text",
             SignupForm::FIRSTNAME,
-            isset($_POST[SignupForm::FIRSTNAME]) ? $_POST[SignupForm::FIRSTNAME] : NULL,
+            isset($_POST[SignupForm::FIRSTNAME]) ? $_POST[SignupForm::FIRSTNAME] : null,
             $inputErrorMessages[SignupForm::FIRSTNAME]
           ));
 
@@ -111,7 +130,7 @@ html::tag("div");
             "Nom",
             "text",
             SignupForm::LASTNAME,
-            isset($_POST[SignupForm::LASTNAME]) ? $_POST[SignupForm::LASTNAME] : NULL,
+            isset($_POST[SignupForm::LASTNAME]) ? $_POST[SignupForm::LASTNAME] : null,
             $inputErrorMessages[SignupForm::LASTNAME]
           ));
 
@@ -120,7 +139,7 @@ html::tag("div");
             "Mot de passe",
             "password",
             SignupForm::PASSWORD,
-            NULL,
+            null,
             $inputErrorMessages[SignupForm::PASSWORD]
           ));
 
@@ -129,7 +148,7 @@ html::tag("div");
             "Confirmation du mot de passe",
             "password",
             SignupForm::CONFIRM_PASSWORD,
-            NULL,
+            null,
             $inputErrorMessages[SignupForm::CONFIRM_PASSWORD]
           ));
 
@@ -141,11 +160,11 @@ html::tag("div");
     html::close();
   html::close();
   
-  require_once "php/includes/footer.php";
+  require_once __DIR__ . "/php/includes/footer.php";
 html::close();
 /****************************************
 *  END main content
 ****************************************/
 
-require_once("php/includes/end-html.php");
+require_once __DIR__ . "/php/includes/end-html.php";
 ?>

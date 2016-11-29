@@ -1,8 +1,7 @@
 <?php
-require_once "php/src/database/DB.php";
-
 class SignupForm
 {
+    // Values of each input
     private $login;
     private $firstname;
     private $lastname;
@@ -11,6 +10,7 @@ class SignupForm
 
     private $errorMessages;
 
+    // Names of each input
     const LOGIN = "login";
     const FIRSTNAME = "firstname";
     const LASTNAME = "lastname";
@@ -18,6 +18,7 @@ class SignupForm
     const CONFIRM_PASSWORD = "confirm-password";
     const BTN_SIGNUP = "btn-signup";
 
+    // Criteria
     const MIN_CHAR_PWD = 4;
     const MIN_CHAR_LOGIN = 3;
 
@@ -30,11 +31,11 @@ class SignupForm
         $this->confirmPassword = $confirmPassword;
 
         $this->errorMessages = [
-            SignupForm::LOGIN => NULL,
-            SignupForm::FIRSTNAME => NULL,
-            SignupForm::LASTNAME => NULL,
-            SignupForm::PASSWORD => NULL,
-            SignupForm::CONFIRM_PASSWORD => NULL
+            SignupForm::LOGIN => null,
+            SignupForm::FIRSTNAME => null,
+            SignupForm::LASTNAME => null,
+            SignupForm::PASSWORD => null,
+            SignupForm::CONFIRM_PASSWORD => null
         ];
     }
 
@@ -45,25 +46,11 @@ class SignupForm
 
     public function performValidation()
     {
-        // Check all input
-        if ($this->isLoginValid() &&
+        // Check all inputs
+        return
+            $this->isLoginValid() &&
             $this->isFirstnameValid() && $this->isLastnameValid() &&
-            $this->isPasswordValid() && $this->isConfirmPasswordValid())
-        {
-          // Insert user in database
-          $stmt = DB::prepare("INSERT INTO User (User_username, User_password, User_firstname, User_lastname) VALUES (?, ?, ?, ?)");
-          if ($stmt->execute([$this->login, sha1($this->password), $this->firstname, $this->lastname]))
-          {
-            session_start();
-            $_SESSION["login"] = $_POST[SignupForm::LOGIN];
-            $_SESSION["firstname"] = $_POST[SignupForm::FIRSTNAME];
-            $_SESSION["lastname"] = $_POST[SignupForm::LASTNAME];
-
-            return true;
-          }
-        }
-
-        return false;
+            $this->isPasswordValid() && $this->isConfirmPasswordValid();
     }
 
     private function isLoginValid()
@@ -82,8 +69,9 @@ class SignupForm
             return false;
         }
 
+        require_once __DIR__ . "/../database/dao/UserDao.php";
         // Check if login does not already exist in DB
-        if ($row = DB::run("SELECT * FROM User WHERE User_username=?", [$this->login])->fetchColumn())
+        if (UserDao::find($this->login))
         {
             $this->errorMessages[SignupForm::LOGIN] = "Le login existe déjà.";
             return false;
