@@ -6,7 +6,7 @@ class DB
     protected function __construct() {}
     protected function __clone() {}
 
-    const CONFIG_PATH = __DIR__ . "/../../../config/config-database.json";
+    //const CONFIG_PATH = __DIR__ . "/../../../config/config-database.json";
     const HOST = "host";
     const NAME = "dbname";
     const USER = "user";
@@ -23,7 +23,7 @@ class DB
                 PDO::ATTR_EMULATE_PREPARES   => FALSE,
             );
 
-            $str = file_get_contents(DB::CONFIG_PATH);
+            $str = file_get_contents(__DIR__ . "/../../../config/config-database.json");
             $dbInfo = json_decode($str, true);
 
             $dsn = 'mysql:host=' . $dbInfo[DB::HOST] . ';dbname=' . $dbInfo[DB::NAME]. ';charset=' . $dbInfo[DB::CHARSET];

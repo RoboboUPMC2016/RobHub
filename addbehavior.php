@@ -30,13 +30,13 @@ if (isset($_POST[AddBehaviorForm::BTN_ADD]))
 
   // Get dex content
   $dexContent = $addBehaviorForm->performValidation();
+  $fileUploadedSuccess = false;
   // Java file uploaded is ok : dex content is not null
   if ($dexContent !== null)
   {
     require_once __DIR__ . "/php/src/database/dao/BehaviorDao.php";
     // Insert new Behavior in DB
-    $behaviorDao = new BehaviorDao();
-    $behaviorId = strval($behaviorDao->add($_POST[AddBehaviorForm::LABEL], $_POST[AddBehaviorForm::DESC], $_SESSION[SessionData::LOGIN]));
+    $behaviorId = strval(BehaviorDao::add($_POST[AddBehaviorForm::LABEL], $_POST[AddBehaviorForm::DESC], $_SESSION[SessionData::LOGIN]));
 
     // Insert has succeeded
     if ($behaviorId !== -1)
@@ -54,10 +54,6 @@ if (isset($_POST[AddBehaviorForm::BTN_ADD]))
       );
 
       $fileUploadedSuccess = true;
-    }
-    else 
-    {
-      $fileUploadedSuccess = false;
     }
   }
 }

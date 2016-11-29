@@ -31,11 +31,11 @@ class SignupForm
         $this->confirmPassword = $confirmPassword;
 
         $this->errorMessages = [
-            SignupForm::LOGIN => null,
-            SignupForm::FIRSTNAME => null,
-            SignupForm::LASTNAME => null,
-            SignupForm::PASSWORD => null,
-            SignupForm::CONFIRM_PASSWORD => null
+            self::LOGIN => null,
+            self::FIRSTNAME => null,
+            self::LASTNAME => null,
+            self::PASSWORD => null,
+            self::CONFIRM_PASSWORD => null
         ];
     }
 
@@ -56,16 +56,16 @@ class SignupForm
     private function isLoginValid()
     {
         // Check length
-        if (strlen($this->login) < SignupForm::MIN_CHAR_LOGIN)
+        if (strlen($this->login) < self::MIN_CHAR_LOGIN)
         {
-            $this->errorMessages[SignupForm::LOGIN] = "Le login doit contenir au moins " . SignupForm::MIN_CHAR_LOGIN . " caractères.";
+            $this->errorMessages[self::LOGIN] = "Le login doit contenir au moins " . self::MIN_CHAR_LOGIN . " caractères.";
             return false;
         }
 
         // Check format
         if (!preg_match("/^[a-zA-Z0-9]+$/", $this->login))
         {
-            $this->errorMessages[SignupForm::LOGIN] = "Seules les lettres et les chiffres sont autorisées.";
+            $this->errorMessages[self::LOGIN] = "Seules les lettres et les chiffres sont autorisées.";
             return false;
         }
 
@@ -73,7 +73,7 @@ class SignupForm
         // Check if login does not already exist in DB
         if (UserDao::find($this->login))
         {
-            $this->errorMessages[SignupForm::LOGIN] = "Le login existe déjà.";
+            $this->errorMessages[self::LOGIN] = "Le login existe déjà.";
             return false;
         }
 
@@ -85,14 +85,14 @@ class SignupForm
         // Check length
         if (empty($this->firstname))
         {
-            $this->errorMessages[SignupForm::FIRSTNAME] = "Le prénom ne peut pas être vide.";
+            $this->errorMessages[self::FIRSTNAME] = "Le prénom ne peut pas être vide.";
             return false;
         }
 
         // Check format
         if (!preg_match("/^[a-zA-Z]+$/", $this->firstname))
         {
-            $this->errorMessages[SignupForm::FIRSTNAME] = "Seules les lettres sont autorisées.";
+            $this->errorMessages[self::FIRSTNAME] = "Seules les lettres sont autorisées.";
             return false;
         }
 
@@ -104,14 +104,14 @@ class SignupForm
         // Check length
         if (empty($this->lastname))
         {
-            $this->errorMessages[SignupForm::LASTNAME] = "Le nom ne peut pas être vide.";
+            $this->errorMessages[self::LASTNAME] = "Le nom ne peut pas être vide.";
             return false;
         }
 
         // Check format
         if (!preg_match("/^[a-zA-Z]+$/", $this->lastname))
         {
-            $this->errorMessages[SignupForm::LASTNAME] = "Seules les lettres sont autorisées.";
+            $this->errorMessages[self::LASTNAME] = "Seules les lettres sont autorisées.";
             return false;
         }
 

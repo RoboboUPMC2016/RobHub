@@ -16,7 +16,7 @@ class AddBehaviorForm
     const BTN_ADD = "btn-add";
 
     // Socket info
-    const CONFIG_PATH = __DIR__ . "/../../../config/config-socket.json";
+    //const CONFIG_PATH = __DIR__ . "/../../../config/config-socket.json";
     const BUFFER_CODE = 3;
     private static $socketFactory = null;
     private static $socketAddress = null;
@@ -49,7 +49,7 @@ class AddBehaviorForm
             self::$socketFactory = new \Socket\Raw\Factory();
 
             // Load data from config json file
-            $str = file_get_contents(self::CONFIG_PATH);
+            $str = file_get_contents(__DIR__ . "/../../../config/config-socket.json");
             $socketInfo = json_decode($str, true);
 
             // Create socket address
@@ -76,54 +76,61 @@ class AddBehaviorForm
 
     private function javaToDex()
     {
-        // Create socket
-        $socket = self::$socketFactory->createClient(self::$socketAddress);
-
-        // Send number of files (normally it should always be 1)
-        $socket->write("1\n");
-
-        // Check if number of file is valid (should always be OK)
-        $code = $socket->read(self::BUFFER_CODE);
-        if (intval($code) === -1)
+        try
         {
-            $this->errorMessages[self::BEHAVIOR_FILE] = "Le nombre de fichier est invalide.";
+            // Create socket
+            $socket = self::$socketFactory->createClient(self::$socketAddress);
+
+            // Send number of files (normally it should always be 1)
+            $socket->write("1\n");
+
+            // Check if number of file is valid (should always be OK)
+            $code = $socket->read(self::BUFFER_CODE);
+            if (intval($code) === -1)
+            {
+                $this->errorMessages[self::BEHAVIOR_FILE] = "Le nombre de fichier est invalide.";
+                $socket->close();
+                return null;
+            }
+
+            // Send file name and file size
+            $socket->write($this->file["name"] . "\n");
+            $socket->write($this->file["size"] . "\n");
+
+            // Check if file is valid
+            $code = $socket->read(self::BUFFER_CODE);
+            if (intval($code) === -1)
+            {
+                $this->errorMessages[self::BEHAVIOR_FILE] = "Le nom ou la taille du fichier est invalide.";
+                $socket->close();
+                return null;
+            }
+
+            // Send java source code
+            $sourceCode = file_get_contents($this->file["tmp_name"], FILE_USE_INCLUDE_PATH);
+            $socket->write($sourceCode . "\n");
+
+            // Check if compilation of source code has succeeded
+            $code = $socket->read(self::BUFFER_CODE);
+            if (intval($code) === -1)
+            {
+                $this->errorMessages[self::BEHAVIOR_FILE] = "La compilation du fichier java a échoué.";
+                $socket->close();
+                return null;
+            }
+
+            // Get size and content of the dex file
+            $dexFileSize = intval($socket->read(128));
+            $dexFileContent = $socket->read($dexFileSize);
+
             $socket->close();
-            return null;
+
+            return $dexFileContent;
         }
+        catch (Exception $e)
+        {}
 
-        // Send file name and file size
-        $socket->write($this->file["name"] . "\n");
-        $socket->write($this->file["size"] . "\n");
-
-        // Check if file is valid
-        $code = $socket->read(self::BUFFER_CODE);
-        if (intval($code) === -1)
-        {
-            $this->errorMessages[self::BEHAVIOR_FILE] = "Le nom ou la taille du fichier est invalide.";
-            $socket->close();
-            return null;
-        }
-
-        // Send java source code
-        $sourceCode = file_get_contents($this->file["tmp_name"], FILE_USE_INCLUDE_PATH);
-        $socket->write($sourceCode . "\n");
-
-        // Check if compilation of source code has succeeded
-        $code = $socket->read(self::BUFFER_CODE);
-        if (intval($code) === -1)
-        {
-            $this->errorMessages[self::BEHAVIOR_FILE] = "La compilation du fichier java a échoué.";
-            $socket->close();
-            return null;
-        }
-
-        // Get size and content of the dex file
-        $dexFileSize = intval($socket->read(128));
-        $dexFileContent = $socket->read($dexFileSize);
-
-        $socket->close();
-
-        return $dexFileContent;
+        return null;
     }
 
     private function isLabelValid()
