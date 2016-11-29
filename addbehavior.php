@@ -1,21 +1,21 @@
 <?php
 session_start();
 
-require_once "php/src/enum/SessionData.php";
+require_once __DIR__ . "/php/src/enum/SessionData.php";
 
 // Redirect to home page if the user is authenticated
 if (!isset($_SESSION[SessionData::LOGIN]))
 {
-  require_once "php/src/util/RouteUtils.php";
+  require_once __DIR__ . "/php/src/util/RouteUtils.php";
   RouteUtils::goToHomePage();
 }
 
-require_once "php/src/form/AddBehaviorForm.php";
+require_once __DIR__ . "/php/src/form/AddBehaviorForm.php";
 
 // Button add pressed
 if (isset($_POST[AddBehaviorForm::BTN_ADD]))
 {
-  require_once "php/src/util/StringUtils.php";
+  require_once __DIR__ . "/php/src/util/StringUtils.php";
 
   // Clean input
   $_POST[AddBehaviorForm::LABEL] = StringUtils::clean($_POST[AddBehaviorForm::LABEL]);
@@ -33,7 +33,7 @@ if (isset($_POST[AddBehaviorForm::BTN_ADD]))
   // Java file uploaded is ok : dex content is not null
   if ($dexContent !== null)
   {
-    require_once "php/src/database/dao/BehaviorDao.php";
+    require_once __DIR__ . "/php/src/database/dao/BehaviorDao.php";
     // Insert new Behavior in DB
     $behaviorDao = new BehaviorDao();
     $behaviorId = strval($behaviorDao->add($_POST[AddBehaviorForm::LABEL], $_POST[AddBehaviorForm::DESC], $_SESSION[SessionData::LOGIN]));
@@ -41,7 +41,7 @@ if (isset($_POST[AddBehaviorForm::BTN_ADD]))
     // Insert has succeeded
     if ($behaviorId !== -1)
     {
-      require_once "php/src/util/BehaviorFileWriter.php";
+      require_once __DIR__ . "/php/src/util/BehaviorFileWriter.php";
 
       // Create java file
       BehaviorFileWriter::createPostFile($behaviorId, $_FILES[AddBehaviorForm::BEHAVIOR_FILE]);
@@ -62,12 +62,12 @@ if (isset($_POST[AddBehaviorForm::BTN_ADD]))
   }
 }
 
-require_once "php/src/enum/PageTitle.php";
+require_once __DIR__ . "/php/src/enum/PageTitle.php";
 
 // Set title of the page
 $PAGE_TITLE = PageTitle::ADD_BEHAVIOR;
 
-require_once("php/includes/start-html.php");
+require_once __DIR__ . "/php/includes/start-html.php";
 
 /****************************************
 *  START main content
@@ -125,10 +125,10 @@ html::tag("div");
             }
           }
 
-          require_once "php/src/util/HtmlWritterUtils.php";
+          require_once __DIR__ . "/php/src/util/HtmlWriterUtils.php";
 
           // Label
-          html::insert_code(HtmlWritterUtils::createLabelInput(
+          html::insert_code(HtmlWriterUtils::createLabelInput(
             "Label",
             "text",
             AddBehaviorForm::LABEL,
@@ -137,7 +137,7 @@ html::tag("div");
           ));
 
           // Description
-          html::insert_code(HtmlWritterUtils::createLabelTextArea(
+          html::insert_code(HtmlWriterUtils::createLabelTextArea(
             "Description",
             AddBehaviorForm::DESC,
             isset($_POST[AddBehaviorForm::DESC]) ? $_POST[AddBehaviorForm::DESC] : null,
@@ -146,7 +146,7 @@ html::tag("div");
 
           // Add file
           $ACCEPTED_FILES = "." . AddBehaviorForm::ACCEPTED_FILES;
-          html::insert_code(HtmlWritterUtils::createLabelInputFile(
+          html::insert_code(HtmlWriterUtils::createLabelInputFile(
             "Fichier du comportement (" . $ACCEPTED_FILES . ")",
             $ACCEPTED_FILES,
             AddBehaviorForm::BEHAVIOR_FILE,
@@ -156,17 +156,17 @@ html::tag("div");
 
           // Add behavior button
           html::nl();
-          html::insert_code(HtmlWritterUtils::createSubmitBtn(AddBehaviorForm::BTN_ADD, "Ajouter"));
+          html::insert_code(HtmlWriterUtils::createSubmitBtn(AddBehaviorForm::BTN_ADD, "Ajouter"));
         html::close();
       html::close();
     html::close();
   html::close();
   
-  require_once "php/includes/footer.php";
+  require_once __DIR__ . "/php/includes/footer.php";
 html::close();
 /****************************************
 *  END main content
 ****************************************/
 
-require_once("php/includes/end-html.php");
+require_once __DIR__ . "/php/includes/end-html.php";
 ?>

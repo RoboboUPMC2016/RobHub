@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once "php/src/enum/PageTitle.php";
+require_once __DIR__ . "/php/src/enum/PageTitle.php";
 
 // Set title of the page
 $PAGE_TITLE = PageTitle::HOME;
 
-require_once("php/includes/start-html.php");
+require_once __DIR__ . "/php/includes/start-html.php";
 
 /****************************************
 *  START main content
@@ -23,7 +23,7 @@ html::tag("div");
           $welcomeMsg = "Bienvenue sur le réseau RobHub";
 
           // Add login in welcome message
-          require_once "php/src/enum/SessionData.php";
+          require_once __DIR__  . "/php/src/enum/SessionData.php";
           if (isset($_SESSION[SessionData::LOGIN]))
           {
             $welcomeMsg = $welcomeMsg . " " . $_SESSION[SessionData::LOGIN];
@@ -36,10 +36,8 @@ html::tag("div");
     // Display all behaviors
     html::add_attribute("class", "row");
     html::tag("div");
-      require_once "php/src/database/dao/BehaviorDao.php";
-      $behaviorDao = new BehaviorDao();
-      $behaviors = $behaviorDao->getAll();
-
+      require_once __DIR__ . "/php/src/database/dao/BehaviorDao.php";
+      $behaviors = BehaviorDao::getAll();
       foreach ($behaviors as $behavior)
       {
         html::add_attribute("class", "col-md-4 text-center");
@@ -62,11 +60,11 @@ html::tag("div");
     html::close();
   html::close();
   
-  require_once "php/includes/footer.php";
+  require_once __DIR__ . "/php/includes/footer.php";
 html::close();
 /****************************************
 *  END main content
 ****************************************/
 
-require_once("php/includes/end-html.php");
+require_once __DIR__ . "/php/includes/end-html.php";
 ?>

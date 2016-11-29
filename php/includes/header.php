@@ -1,6 +1,6 @@
 <?php
-require_once "php/src/enum/PageTitle.php";
-require_once "php/src/enum/SessionData.php";
+require_once __DIR__ . "/../src/enum/PageTitle.php";
+require_once __DIR__ . "/../src/enum/SessionData.php";
 
 /****************************************
 *  START headeer

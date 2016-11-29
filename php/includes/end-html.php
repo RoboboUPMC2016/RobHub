@@ -5,7 +5,7 @@
   ****************************************/
   html::close();
 
-  require_once "php/includes/scripts-js.php";
+  require_once __DIR__ . "/scripts-js.php";
 
 /****************************************
 *  END body

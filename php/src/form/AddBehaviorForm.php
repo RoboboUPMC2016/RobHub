@@ -1,6 +1,6 @@
 <?php
-require_once "php/src/database/DB.php";
-require_once "vendor/autoload.php";
+require_once __DIR__ . "/../database/DB.php";
+require_once __DIR__ . "/../../../vendor/autoload.php";
 
 class AddBehaviorForm
 {
@@ -16,7 +16,7 @@ class AddBehaviorForm
     const BTN_ADD = "btn-add";
 
     // Socket info
-    const CONFIG_PATH = "config/config-socket.json";
+    const CONFIG_PATH = __DIR__ . "/../../../config/config-socket.json";
     const BUFFER_CODE = 3;
     private static $socketFactory = null;
     private static $socketAddress = null;

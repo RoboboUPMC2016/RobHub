@@ -1,6 +1,4 @@
 <?php
-require_once "php/src/database/DB.php";
-
 class SigninForm
 {
     private $login;

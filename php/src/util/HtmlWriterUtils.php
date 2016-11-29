@@ -1,7 +1,7 @@
 <?php
-class HtmlWritterUtils
+class HtmlWriterUtils
 {
-  public static function createLabelInput($label, $inputType, $inputId, $inputValue, $errorMsg = NULL)
+  public static function createLabelInput($label, $inputType, $inputId, $inputValue, $errorMsg = null)
   {
     // Open div
     $labelInput = '<div class="col-md-11"><div class="form-group">';
@@ -13,10 +13,10 @@ class HtmlWritterUtils
     $labelInput .= '<input class="form-control" type="' . $inputType .
                                              '" name="' . $inputId .
                                              '" id="' . $inputId . '"' .
-                                             ($inputValue === NULL || empty($inputValue) ? '' : ' value="' . $inputValue . '"') .
+                                             ($inputValue === null || empty($inputValue) ? '' : ' value="' . $inputValue . '"') .
                                              '>';
     // Create error message
-    if ($errorMsg !== NULL)
+    if ($errorMsg !== null)
     {
       $labelInput .= '<span class="errorMsg">' . $errorMsg . '</span>';
     }
@@ -27,7 +27,7 @@ class HtmlWritterUtils
     return $labelInput;
   }
 
-  public static function createLabelInputFile($label, $acceptedFiles, $inputId, $inputValue, $errorMsg = NULL)
+  public static function createLabelInputFile($label, $acceptedFiles, $inputId, $inputValue, $errorMsg = null)
   {
     // Open div
     $labelInputFile = '<div class="col-md-11"><div class="form-group">';
@@ -40,10 +40,10 @@ class HtmlWritterUtils
                                    '" accept="' . $acceptedFiles .
                                    '" name="' . $inputId .
                                    '" id="' . $inputId . '"' .
-                                   ($inputValue === NULL || empty($inputValue) ? '' : ' value="' . $inputValue . '"') .
+                                   ($inputValue === null || empty($inputValue) ? '' : ' value="' . $inputValue . '"') .
                                    '>';
     // Create error message
-    if ($errorMsg !== NULL)
+    if ($errorMsg !== null)
     {
       $labelInputFile .= '<span class="errorMsg">' . $errorMsg . '</span>';
     }
@@ -54,7 +54,7 @@ class HtmlWritterUtils
     return $labelInputFile;
   }
 
-  public static function createLabelTextArea($label, $textAreaId, $textAreaValue, $errorMsg = NULL, $rows = 4,  $cols = 50)
+  public static function createLabelTextArea($label, $textAreaId, $textAreaValue, $errorMsg = null, $rows = 4,  $cols = 50)
   {
     // Open div
     $labelTextArea = '<div class="col-md-11"><div class="form-group">';
@@ -69,12 +69,12 @@ class HtmlWritterUtils
                                    '" name="' . $textAreaId .
                                    '" id="' . $textAreaId . '">';
 
-    $labelTextArea .= ($textAreaValue === NULL || empty($textAreaValue)) ? "" : $textAreaValue;
+    $labelTextArea .= ($textAreaValue === null || empty($textAreaValue)) ? "" : $textAreaValue;
 
     $labelTextArea .= "</textarea>";
 
     // Create error message
-    if ($errorMsg !== NULL)
+    if ($errorMsg !== null)
     {
       $labelTextArea .= '<span class="errorMsg">' . $errorMsg . '</span>';
     }

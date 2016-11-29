@@ -1,5 +1,5 @@
 <?php
-require_once("php/lib/html-writer/html-writer.php");
+require_once __DIR__ . "/../lib/html-writer/html-writer.php";
 html::init();
 
 /****************************************
@@ -12,7 +12,7 @@ html::insert_code("<!DOCTYPE html>");
 ****************************************/
 html::add_attributes(["class" => "no-js", "lang" => "fr"]);
 html::tag("html");
-  require_once("php/includes/head.php");
+  require_once __DIR__ . "/head.php";
 
   /****************************************
   *  START body
@@ -26,5 +26,5 @@ html::tag("html");
     html::add_attribute("id", "fh5co-page");
     html::tag("div");
 
-    require_once("php/includes/header.php");
+    require_once __DIR__ . "/header.php";
 ?>

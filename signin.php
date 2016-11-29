@@ -83,10 +83,10 @@ html::tag("div");
         // Form
         html::add_attributes(["class" => "row", "method" => "post"]);
         html::tag("form");
-          require_once __DIR__ . "/php/src/util/HtmlWritterUtils.php";
+          require_once __DIR__ . "/php/src/util/HtmlWriterUtils.php";
 
           // Login
-          html::insert_code(HtmlWritterUtils::createLabelInput(
+          html::insert_code(HtmlWriterUtils::createLabelInput(
             "Identifiant",
             "text",
             SigninForm::LOGIN,
@@ -94,7 +94,7 @@ html::tag("div");
           ));
 
           // Password
-          html::insert_code(HtmlWritterUtils::createLabelInput(
+          html::insert_code(HtmlWriterUtils::createLabelInput(
             "Mot de passe",
             "password",
             SigninForm::PASSWORD,
@@ -103,7 +103,7 @@ html::tag("div");
 
           // Submit button
           html::nl();
-          html::insert_code(HtmlWritterUtils::createSubmitBtn(SigninForm::BTN_SIGNIN, "Se connecter"));
+          html::insert_code(HtmlWriterUtils::createSubmitBtn(SigninForm::BTN_SIGNIN, "Se connecter"));
 
         html::close();
       html::close();
