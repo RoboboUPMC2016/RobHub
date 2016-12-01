@@ -3,8 +3,7 @@ require_once __DIR__ . "/../php/src/util/BehaviorFileUtils.php";
 require_once __DIR__ . "/../php/src/database/dao/BehaviorDao.php";
 
 // Get all behaviors
-$behaviorDao = new BehaviorDao();
-$behaviors = $behaviorDao->getAll();
+$behaviors = BehaviorDao::getAll();
 
 $behaviorsResult = ["behaviors" => []];
 
@@ -16,7 +15,7 @@ foreach ($behaviors as $behavior)
     [
       "id" => $behavior->id,
       "label" => $behavior->label,
-      "dex_url" => BehaviorFileUtils::getDexFile(strval($behavior->id))
+      "dex_url" => BehaviorFileUtils::getExternDexPath(strval($behavior->id))
     ]
   );
 }

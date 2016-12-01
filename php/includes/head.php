@@ -55,8 +55,18 @@ html::tag("head");
   html::add_attributes(["rel" => "stylesheet", "href" => "assets/css/bootstrap.css"]);
   html::single_tag("link");
 
+  html::add_attributes(["rel" => "stylesheet", "href" => "http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"]);
+  html::single_tag("link");
+
   html::add_attributes(["rel" => "stylesheet", "href" => "assets/css/style.css"]);
   html::single_tag("link");
+
+  /****************************************
+  *  Prettify
+  ****************************************/
+  html::add_attribute("src", "assets/js/run_prettify.js");
+  html::tag("script");
+  html::close();
 
   /****************************************
   *  Modernizr JS

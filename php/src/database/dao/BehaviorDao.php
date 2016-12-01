@@ -27,13 +27,31 @@ class BehaviorDao
         $behavior->id = $row["Behavior_id"];
         $behavior->label = $row["Behavior_label"];
         $behavior->description = $row["Behavior_description"];
-        $behavior->username = $row["Behavior_username"];
+        $behavior->username = $row["User_username"];
         $behavior->timestamp = $row["Behavior_timestamp"];
 
         array_push($behaviors, $behavior);
       }
 
       return $behaviors;
+    }
+
+    public static function getById($id)
+    {
+      $row = DB::run("SELECT * FROM Behavior WHERE Behavior_id=?", [$id])->fetch();
+      if ($row)
+      {
+        $behavior = new Behavior();
+        $behavior->id = $row["Behavior_id"];
+        $behavior->label = $row["Behavior_label"];
+        $behavior->description = $row["Behavior_description"];
+        $behavior->username = $row["User_username"];
+        $behavior->timestamp = $row["Behavior_timestamp"];
+
+        return $behavior;
+      }
+
+      return null;
     }
 }
 ?>

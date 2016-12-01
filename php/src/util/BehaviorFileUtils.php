@@ -4,12 +4,13 @@ class BehaviorFileUtils
     const TARGET_BEHAVIORS = "behaviors/";
     //const TARGET_DIR = __DIR__ . "/../../../" . self::TARGET_BEHAVIORS;
     const DEX_EXT = ".dex";
+    const JAVA_EXT = ".java";
     
     public static function createPostFile($id, $postFile)
     {
       $targetDirId = self::createTargetDirId($id);
 
-    // Copy post file to behaviors/number_id/
+      // Copy post file to behaviors/number_id/
       move_uploaded_file($postFile["tmp_name"], $targetDirId . basename($postFile["name"]));
     }
 
@@ -21,16 +22,46 @@ class BehaviorFileUtils
       file_put_contents($targetDirId . $fileName . self::DEX_EXT, $dexContent);
     }
 
-    public static function getDexFile($id)
+    public static function getJavaContent($id)
+    {
+      return file_get_contents(self::getInternJavaPath($id));
+    }
+
+    public static function getInternJavaPath($id)
     {
         $targetDirId = self::targetDirIdPath($id);
 
-        // Get dex file
-        foreach (glob($targetDirId . "*" . self::DEX_EXT) as $filename) {
-            return $_SERVER["SERVER_NAME"] . "/robhub/" . self::TARGET_BEHAVIORS . "/" . $id . "/" . basename($filename);
+        // Get java file
+        foreach (glob($targetDirId . "*" . self::JAVA_EXT) as $filename)
+        {
+            return self::TARGET_BEHAVIORS . $id . "/" . basename($filename);
         }
 
-        // Dex file not found
+        // Java file not found
+        return null;
+    }
+
+    public static function getExternJavaPath($id)
+    {
+        return self::getExternPath($id, self::JAVA_EXT);
+    }
+
+    public static function getExternDexPath($id)
+    {
+        return self::getExternPath($id, self::DEX_EXT);
+    }
+
+    private static function getExternPath($id, $ext)
+    {
+        $targetDirId = self::targetDirIdPath($id);
+
+        // Get file
+        foreach (glob($targetDirId . "*" . $ext) as $filename)
+        {
+            return "http://" . $_SERVER["SERVER_NAME"] . "/robhub/" . self::TARGET_BEHAVIORS . $id . "/" . basename($filename);
+        }
+
+        // File not
         return null;
     }
 

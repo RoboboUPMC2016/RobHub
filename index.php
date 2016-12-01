@@ -45,7 +45,7 @@ html::tag("div");
           html::add_attribute("class", "blog-inner");
           html::tag("div");
             // Image
-            html::insert_code('<a href="#"><img class="img-responsive" src="assets/images/image_4.jpg" alt="' . $behavior->label . '"></a>');
+            html::insert_code('<a href="behaviordetails.php?bid=' . $behavior->id . '"><img class="img-responsive" src="assets/images/image_4.jpg" alt="' . $behavior->label . '"></a>');
 
             // Label + desc
             html::add_attribute("class", "desc");

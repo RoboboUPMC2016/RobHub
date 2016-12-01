@@ -6,5 +6,6 @@ abstract class PageTitle
   const SIGNIN = "Connexion";
   const LOGOUT = "Déconnexion";
   const ADD_BEHAVIOR = "Ajout comportement";
+  const BEHAVIOR_DETAILS = "Comportement";
 }
 ?>
