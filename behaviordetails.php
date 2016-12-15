@@ -90,7 +90,7 @@ html::tag("div");
             html::tag("h2", $behavior->label);
 
             // Creator + date
-            html::insert_code("<h5><i class='fa fa-clock-o' aria-hidden='true'></i>&nbsp;Publié par Toto," . $behavior->timestamp . "</h5>");
+            html::insert_code("<h5><i class='fa fa-clock-o' aria-hidden='true'></i>&nbsp;Publié par " . $behavior->username .", " . $behavior->timestamp . "</h5>");
 
             // Description
             html::add_attribute("class", "textJustify");

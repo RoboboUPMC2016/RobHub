@@ -52,7 +52,8 @@ class BehaviorFileUtils
 
     public static function getJavaContent($id)
     {
-      return file_get_contents(self::getInternJavaPath($id));
+      $javaPath = self::getInternJavaPath($id);
+      return empty($javaPath) ? "" : file_get_contents($javaPath);
     }
 
     public static function getInternJavaPath($id)
