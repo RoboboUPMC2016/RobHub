@@ -7,6 +7,27 @@
 
 session_start();
 
+require_once __DIR__ . "/php/src/form/UploadVideoForm.php";
+// Button add pressed
+if (isset($_POST[UploadVideoForm::BTN_ADD]))
+{
+  require_once __DIR__ . "/php/src/util/StringUtils.php";
+
+  // Create Upload video form
+  $behaviorId = intval(StringUtils::clean($_GET["bid"]));
+  $uploadVideoForm = new UploadVideoForm($behaviorId, $_FILES[UploadVideoForm::VIDEO_FILE]);
+
+  // Check validation
+  if ($uploadSuccess = $uploadVideoForm->performValidation())
+  {
+    require_once __DIR__ . "/php/src/util/BehaviorFileUtils.php";
+    require_once __DIR__ . "/php/src/enum/SessionData.php";
+
+    // Create video file
+    BehaviorFileUtils::createVideoFile($behaviorId, $_SESSION[SessionData::LOGIN], $_FILES[UploadVideoForm::VIDEO_FILE]);
+  }
+}
+
 require_once __DIR__ . "/php/src/enum/PageTitle.php";
 
 // Set title of the page
@@ -82,13 +103,20 @@ html::tag("div");
             html::add_attribute("class", "nav nav-tabs");
             html::tag("ul");
               // Java
-              html::add_attribute("class", "active");
+              if (!isset($_POST[UploadVideoForm::BTN_ADD]))
+              {
+                html::add_attribute("class", "active");
+              }
               html::tag("li");
                 html::add_attributes(["data-toggle" => "tab", "href" => "#java"]);
                 html::tag("a", "Java");
               html::close();
 
               // Videos
+              if (isset($_POST[UploadVideoForm::BTN_ADD]))
+              {
+                html::add_attribute("class", "active");
+              }
               html::tag("li");
                 html::add_attributes(["data-toggle" => "tab", "href" => "#videos"]);
                 html::tag("a", "Vidéos");
@@ -99,7 +127,15 @@ html::tag("div");
             html::add_attribute("class", "tab-content");
             html::tag("div");
               // Java
-              html::add_attributes(["id" => "java", "class" => "tab-pane fade in active"]);
+              // Button upload pressed
+              if (isset($_POST[UploadVideoForm::BTN_ADD]))
+              {
+                html::add_attributes(["id" => "java", "class" => "tab-pane fade"]);
+              }
+              else
+              {
+                html::add_attributes(["id" => "java", "class" => "tab-pane fade in active"]);
+              }
               html::tag("div");
                 require_once __DIR__ . "/php/src/util/BehaviorFileUtils.php";
 
@@ -119,9 +155,72 @@ html::tag("div");
               html::close();
 
               // Videos
-              html::add_attributes(["id" => "videos", "class" => "tab-pane fade"]);
+              // Button upload pressed
+              if (isset($_POST[UploadVideoForm::BTN_ADD]))
+              {
+                html::add_attributes(["id" => "videos", "class" => "tab-pane fade in active"]);
+              }
+              else
+              {
+                html::add_attributes(["id" => "videos", "class" => "tab-pane fade"]);
+              }
               html::tag("div");
-                html::tag("p", "videos");
+                // All videos
+
+
+
+                require_once __DIR__ . "/php/src/enum/SessionData.php";
+                // Only show upload video if the user is authenticated
+                if (isset($_SESSION[SessionData::LOGIN]))
+                {
+                  // Form
+                  html::add_attributes(["class" => "row", "method" => "post", "enctype" => "multipart/form-data"]);
+                  html::tag("form");
+                    require_once __DIR__ . "/php/src/util/HtmlWriterUtils.php";
+
+                    // Create error messages for inputs
+                    $inputErrorMessages = [
+                        UploadVideoForm::VIDEO_FILE => null,
+                        UploadVideoForm::BEHAVIOR_ID => null
+                    ];
+
+                    if (isset($uploadVideoForm))
+                    {
+                      // Get error messages
+                      foreach ($inputErrorMessages as $key => $value)
+                      {
+                        $inputErrorMessages[$key] = $uploadVideoForm->getErrorMessage($key);
+                      }
+                    }
+
+                    if ($inputErrorMessages[UploadVideoForm::BEHAVIOR_ID])
+                    {
+                      html::add_attribute("class", "errorMsg");
+                      html::tag("span", $inputErrorMessages[UploadVideoForm::BEHAVIOR_ID]);
+                    }
+
+                    // Upload success
+                    if (isset($uploadSuccess) && $uploadSuccess)
+                    {
+                      html::add_attribute("class", "successMsg");
+                      html::tag("span", "La vidéo a bien été mise en ligne.");
+                    }
+
+                    // Add video
+                    $ACCEPTED_FILES = "." . UploadVideoForm::ACCEPTED_FILES;
+                    html::insert_code(HtmlWriterUtils::createLabelInputFile(
+                      "Fichier vidéo (" . $ACCEPTED_FILES . ")",
+                      $ACCEPTED_FILES,
+                      UploadVideoForm::VIDEO_FILE,
+                      null,
+                      $inputErrorMessages[UploadVideoForm::VIDEO_FILE]
+                    ));
+
+                    // Add video button
+                    html::nl();
+                    html::insert_code(HtmlWriterUtils::createSubmitBtn(UploadVideoForm::BTN_ADD, "Ajouter"));
+                  html::close();
+                }
               html::close();
             html::close();
 

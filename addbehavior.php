@@ -44,7 +44,7 @@ if (isset($_POST[AddBehaviorForm::BTN_ADD]))
       require_once __DIR__ . "/php/src/util/BehaviorFileUtils.php";
 
       // Create java file
-      BehaviorFileUtils::createPostFile($behaviorId, $_FILES[AddBehaviorForm::BEHAVIOR_FILE]);
+      BehaviorFileUtils::createJavaFile($behaviorId, $_FILES[AddBehaviorForm::BEHAVIOR_FILE]);
 
       // Create dex file
       BehaviorFileUtils::createDexFile(

@@ -5,13 +5,37 @@ class BehaviorFileUtils
     //const TARGET_DIR = __DIR__ . "/../../../" . self::TARGET_BEHAVIORS;
     const DEX_EXT = ".dex";
     const JAVA_EXT = ".java";
+    const MP4_EXT = ".mp4";
     
-    public static function createPostFile($id, $postFile)
+    public static function createJavaFile($id, $postFile)
     {
+      // Create behaviors/id
       $targetDirId = self::createTargetDirId($id);
 
-      // Copy post file to behaviors/number_id/
+      // Copy post file to behaviors/id/
       move_uploaded_file($postFile["tmp_name"], $targetDirId . basename($postFile["name"]));
+    }
+
+    public static function createVideoFile($id, $username, $postFile)
+    {
+      // Create behaviors/id
+      $targetDirId = self::createTargetDirId($id);
+
+      // Create behaviors/id/username
+      $targetDirVideo = self::createTargetDirVideo($targetDirId, $username);
+
+      // Create behaviors/id/username/videoname(.mp4)
+      $dest = $targetDirVideo . basename($postFile["name"]);
+
+      // While a video with the same name exists, add a number at the end of its name
+      $i = 1;
+      while (file_exists($dest))
+      {
+        $dest = $targetDirVideo . basename($postFile["name"], self::MP4_EXT) . strval($i++) . self::MP4_EXT;
+      }
+
+      // Copy post file to behaviors/id/
+      move_uploaded_file($postFile["tmp_name"], $dest);
     }
 
     public static function createDexFile($id, $fileName, $dexContent)
@@ -79,9 +103,23 @@ class BehaviorFileUtils
       if (!is_dir($targetDirId))
       {
         mkdir($targetDirId);
+      }
+
+      return $targetDirId;
     }
 
-    return $targetDirId;
+    private static function createTargetDirVideo($targetDirId, $username)
+    {
+      // Create path => behaviors/id/username
+      $targetDirVideo = $targetDirId . $username . "/";
+
+      // Create folder if it doesn't exists
+      if (!is_dir($targetDirVideo))
+      {
+        mkdir($targetDirVideo);
+      }
+
+      return $targetDirVideo;
     }
 }
 ?>
