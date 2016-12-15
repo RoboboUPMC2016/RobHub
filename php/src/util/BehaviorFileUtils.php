@@ -3,9 +3,13 @@ class BehaviorFileUtils
 {
     const TARGET_BEHAVIORS = "behaviors/";
     //const TARGET_DIR = __DIR__ . "/../../../" . self::TARGET_BEHAVIORS;
+    const TARGET_VIDEOS = "videos/";
+
     const DEX_EXT = ".dex";
     const JAVA_EXT = ".java";
     const MP4_EXT = ".mp4";
+
+    const REGEX_HIDDEN_FILES = "/^([^.])/";
     
     public static function createJavaFile($id, $postFile)
     {
@@ -82,11 +86,44 @@ class BehaviorFileUtils
         // Get file
         foreach (glob($targetDirId . "*" . $ext) as $filename)
         {
-            return "http://" . $_SERVER["SERVER_NAME"] . "/robhub/" . self::TARGET_BEHAVIORS . $id . "/" . basename($filename);
+            return self::constructBaseUrl() . self::TARGET_BEHAVIORS . $id . "/" . basename($filename);
         }
 
-        // File not
+        // File not found
         return null;
+    }
+
+    public static function getVideosURL($id)
+    {
+      $videosURL = [];
+
+      // Get behavior/id/videos/
+      $dirVideos = self::targetDirIdPath($id) . self::TARGET_VIDEOS;
+
+      // Get videos only if one videos has already been uploaded
+      if (is_dir($dirVideos))
+      {
+        // Get all sub folders from videos
+        $usernameDirs = preg_grep(self::REGEX_HIDDEN_FILES, scandir($dirVideos));
+        foreach ($usernameDirs as $usernameDir)
+        {
+          // Get videos from the sub folder
+          $videos = preg_grep(self::REGEX_HIDDEN_FILES, scandir($dirVideos . $usernameDir));
+
+          foreach ($videos as $video)
+          {
+            array_push($videosURL, self::constructBaseUrl() .  self::TARGET_BEHAVIORS . $id . "/" . self::TARGET_VIDEOS . $usernameDir . "/" . $video);
+          }
+        }
+      }
+
+      return $videosURL;
+    }
+
+    private static function constructBaseUrl()
+    {
+      $protocol = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off" ? "https" : "http";
+      return $protocol . "://" . $_SERVER["SERVER_NAME"] . "/robhub/";
     }
 
     private static function targetDirIdPath($id)
@@ -110,8 +147,17 @@ class BehaviorFileUtils
 
     private static function createTargetDirVideo($targetDirId, $username)
     {
-      // Create path => behaviors/id/username
-      $targetDirVideo = $targetDirId . $username . "/";
+      // Create path => behaviors/id/videos/
+      $targetDirVideo = $targetDirId . self::TARGET_VIDEOS;
+
+      // Create folder if it doesn't exists
+      if (!is_dir($targetDirVideo))
+      {
+        mkdir($targetDirVideo);
+      }
+
+      // Create path => behaviors/id/videos/username
+      $targetDirVideo .= $username . "/";
 
       // Create folder if it doesn't exists
       if (!is_dir($targetDirVideo))

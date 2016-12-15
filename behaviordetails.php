@@ -165,9 +165,28 @@ html::tag("div");
                 html::add_attributes(["id" => "videos", "class" => "tab-pane fade"]);
               }
               html::tag("div");
-                // All videos
+                require_once __DIR__ . "/php/src/util/BehaviorFileUtils.php";
 
+                $videos = BehaviorFileUtils::getVideosURL($strBid);
+                // Show all videos
+                if (!empty($videos))
+                {
+                  foreach ($videos as $video)
+                  {
+                    html::add_attributes(["width" => "320", "height" => "240", "controls" => ""]);
+                    html::tag("video");
+                      html::add_attributes(["src" => $video, "type" => "video/mp4"]);
+                      html::single_tag("source");
 
+                      html::insert_code("Your browser does not support the video tag.");
+                    html::close();
+                  }
+                }
+                // No video uploaded
+                else
+                {
+                  html::tag("p", "Aucune vidéo n'a été mise en ligne.");
+                }
 
                 require_once __DIR__ . "/php/src/enum/SessionData.php";
                 // Only show upload video if the user is authenticated
