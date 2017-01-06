@@ -175,16 +175,37 @@ html::tag("div");
                 // Show all videos
                 if (!empty($videos))
                 {
+                  // Create video tags
+                  $i = 1;
                   foreach ($videos as $video)
                   {
-                    html::add_attributes(["width" => "320", "height" => "240", "controls" => ""]);
-                    html::tag("video");
-                      html::add_attributes(["src" => $video, "type" => "video/mp4"]);
-                      html::single_tag("source");
+                    html::add_attributes(["id" => "video" . strval($i++), "class" => "hidden"]);
+                    html::tag("div");
+                      html::add_attributes(["class" => "lg-video-object lg-html5", "preload" => "metadata", "controls" => ""]);
+                      html::tag("video");
+                        html::add_attributes(["src" => $video, "type" => "video/mp4"]);
+                        html::single_tag("source");
 
-                      html::insert_code("Your browser does not support the video tag.");
+                        html::insert_code("Your browser does not support the video tag.");
+                      html::close();
                     html::close();
                   }
+
+                  html::br();
+                  // Create gallery
+                  html::add_attribute("id", "gallery-videos");
+                  html::tag("div");
+                    $nbVideos = count($videos);
+                    for ($i = 1; $i <= $nbVideos; ++$i)
+                    {
+                      $strI = strval($i);
+                      html::add_attributes(["data-sub-html" => "Video " . $strI, "data-html" => "#video" . $strI]);
+                      html::tag("span");
+                        html::add_attributes(["src" => "assets/images/default-video-thumbnail.jpg", "width" => "150px", "height" => "75px", "alt" => "Thumbnail video"]);
+                        html::single_tag("img");
+                      html::close();
+                    }
+                  html::close();
                 }
                 // No video uploaded
                 else

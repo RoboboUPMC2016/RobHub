@@ -61,6 +61,9 @@ html::tag("head");
   html::add_attributes(["rel" => "stylesheet", "href" => "assets/css/style.css"]);
   html::single_tag("link");
 
+  html::add_attributes(["rel" => "stylesheet", "href" => "assets/light-gallery/css/lightgallery.min.css"]);
+  html::single_tag("link");
+
   html::add_attributes(["media" => "all", "rel" => "stylesheet", "href" => "assets/bootstrap-star-rating/css/star-rating.min.css"]);
   html::single_tag("link");
 

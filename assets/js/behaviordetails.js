@@ -17,6 +17,9 @@ $(document).ready(function() {
           "json"
         );
       });
+
+      // Init gallery video
+      $("#gallery-videos").lightGallery();
     },
     getMarkByBehaviorId: function(callback) {
        $.get(

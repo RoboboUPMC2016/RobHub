@@ -21,6 +21,23 @@ html::add_attribute("src", "assets/js/main.js");
 html::tag("script");
 html::close();
 
+// Light gallery
+html::add_attribute("src", "assets/light-gallery/js/lightgallery.min.js");
+html::tag("script");
+html::close();
+
+html::add_attribute("src", "assets/light-gallery/js/lg-thumbnail.min.js");
+html::tag("script");
+html::close();
+
+html::add_attribute("src", "assets/light-gallery/js/lg-fullscreen.min.js");
+html::tag("script");
+html::close();
+
+html::add_attribute("src", "assets/light-gallery/js/lg-video.min.js");
+html::tag("script");
+html::close();
+
 html::add_attribute("src", "assets/bootstrap-star-rating/js/star-rating.min.js");
 html::tag("script");
 html::close();
