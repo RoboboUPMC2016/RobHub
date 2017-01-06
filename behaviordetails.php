@@ -95,6 +95,10 @@ html::tag("div");
             // Description
             html::add_attribute("class", "textJustify");
             html::tag("p", $behavior->description);
+
+            // Rating
+            html::add_attributes(["id" => "input-rating"]);
+            html::single_tag("input");
           html::close();
 
           // Tabs

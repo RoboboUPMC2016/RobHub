@@ -52,7 +52,7 @@ html::tag("head");
   html::add_attributes(["rel" => "stylesheet", "href" => "assets/css/simple-line-icons.css"]);
   html::single_tag("link");
 
-  html::add_attributes(["rel" => "stylesheet", "href" => "assets/css/bootstrap.css"]);
+  html::add_attributes(["rel" => "stylesheet", "href" => "assets/css/bootstrap.min.css"]);
   html::single_tag("link");
 
   html::add_attributes(["rel" => "stylesheet", "href" => "http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"]);
@@ -60,6 +60,10 @@ html::tag("head");
 
   html::add_attributes(["rel" => "stylesheet", "href" => "assets/css/style.css"]);
   html::single_tag("link");
+
+  html::add_attributes(["media" => "all", "rel" => "stylesheet", "href" => "assets/bootstrap-star-rating/css/star-rating.min.css"]);
+  html::single_tag("link");
+
 
   /****************************************
   *  Prettify
