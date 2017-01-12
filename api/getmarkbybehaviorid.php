@@ -35,9 +35,10 @@ if (isset($_SESSION[SessionData::LOGIN]))
     {
       require_once __DIR__ . "/../php/src/database/dao/MarkDao.php";
       // The current user has already rated this behavior
-      if (MarkDao::getByBehaviorUser($behaviorId, $_SESSION[SessionData::LOGIN]))
+      $mark = MarkDao::getByBehaviorUser($behaviorId, $_SESSION[SessionData::LOGIN]);
+      if ($mark)
       {
-        $msgCode["message"] = OK;
+        $msgCode["message"] = $mark->value;
         $msgCode["code"] = $errorCode[OK];
       }
       else

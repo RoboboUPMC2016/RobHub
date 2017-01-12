@@ -96,7 +96,15 @@ html::tag("div");
             html::add_attribute("class", "textJustify");
             html::tag("p", $behavior->description);
 
+            // My rating
+            html::tag("label", "My rating");
+            html::add_attributes(["id" => "input-my-rating"]);
+            html::single_tag("input");
+
+            html::br();
+
             // Rating
+            html::tag("label", "Rating");
             html::add_attributes(["id" => "input-rating"]);
             html::single_tag("input");
           html::close();

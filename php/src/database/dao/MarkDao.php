@@ -15,6 +15,12 @@ class MarkDao
     return -1;
   }
 
+  public static function update($value, $behaviorId, $userUsername)
+  {
+    $stmt = DB::run("UPDATE Mark SET Mark_value=? WHERE Behavior_id=? AND User_username=?", [$value, $behaviorId, $userUsername]);
+    return $stmt->rowCount();
+  }
+
   public static function getByBehaviorUser($behaviorId, $userUsername)
   {
     $row = DB::run("SELECT * FROM Mark WHERE Behavior_id=? AND User_username=?", [$behaviorId, $userUsername])->fetch();

@@ -47,16 +47,15 @@ if (isset($_SESSION[SessionData::LOGIN]))
         // User has not yet rate this behavior
         if (!MarkDao::getByBehaviorUser($behaviorId, $_SESSION[SessionData::LOGIN]))
         {
-          // Rate the behavior
           MarkDao::add($mark, $behaviorId, $_SESSION[SessionData::LOGIN]);
-          $msgCode["message"] = OK;
-          $msgCode["code"] = $errorCode[OK];
         }
         else
         {
-          $msgCode["message"] = BEHAVIOR_ALREADY_RATED;
-          $msgCode["code"] = $errorCode[BEHAVIOR_ALREADY_RATED];
+          MarkDao::update($mark, $behaviorId, $_SESSION[SessionData::LOGIN]);
         }
+
+        $msgCode["message"] = OK;
+        $msgCode["code"] = $errorCode[OK];
       }
       else
       {

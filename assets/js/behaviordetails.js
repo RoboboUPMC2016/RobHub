@@ -1,18 +1,19 @@
 $(document).ready(function() {
-  // Behavior Details
+  // BD = Behavior Details
   var BD = {
     init: function() {
-      // First we well init the inpute rating
-      BD.getMarkByBehaviorId(BD.initInputRating);      
+      // First we well init the inputs
+      BD.getMarkByBehaviorId(BD.initInputRating);
+      BD.getMarkByBehaviorId(BD.initInputMyRating);      
 
-      // Change value callback
-      $(BD.inputRating).on("rating.change", function(event, value, caption) {
+      // Update average after rating
+      $(BD.inputMyRating).on("rating.change", function(event, value, caption) {
         $.get(
           "api/ratebehavior.php",
           {bid: BD.behaviorId, mark: value},
           function(data) {
             // Must update average as we rated the behavior
-            BD.getMarkAvgByBehaviorId(BD.updateInputRating, true, false);
+            BD.getMarkAvgByBehaviorId(BD.updateInputRating, BD.inputRating, true, false);
           },
           "json"
         );
@@ -22,7 +23,7 @@ $(document).ready(function() {
       $("#gallery-videos").lightGallery();
     },
     getMarkByBehaviorId: function(callback) {
-       $.get(
+      $.get(
         "api/getmarkbybehaviorid.php",
         {bid: BD.behaviorId},
         function(data) {
@@ -31,31 +32,34 @@ $(document).ready(function() {
         "json"
       );
     },
-    getMarkAvgByBehaviorId: function(callback, disableInput, initInput = true) {
-       $.get(
+    getMarkAvgByBehaviorId: function(callback, input, disableInput, initInput = true) {
+      $.get(
         "api/getmarkavgbybehaviorid.php",
         {bid: BD.behaviorId},
         function(data) {
-          callback(data, disableInput, initInput);
+          callback(data, input, disableInput, initInput);
         },
         "json"
       );
     },
     initInputRating: function(data) {
-      // Not already rated or not authenticated
-      var disableInput = data.code === 0 || data.code === -1;
-      BD.getMarkAvgByBehaviorId(BD.updateInputRating, disableInput);
+      BD.getMarkAvgByBehaviorId(BD.updateInputRating, BD.inputRating, true);
     },
-    updateInputRating: function(data, disableInput, initInput = true) {
-      // Update input rating value with average
+    initInputMyRating: function(data) {
+      // -1 => NOT_AUTHENTICATED
+      var disableInput = data.code === -1;
+      BD.updateInputRating(data, BD.inputMyRating, disableInput);
+    },
+    updateInputRating: function(data, input, disableInput, initInput = true) {
+      // Update input rating value
       if (data.code === 0) {
-        // data.message = average
-        $(BD.inputRating).val(data.message);
+        // data.message = value
+        $(input).val(data.message);
       }
 
       if (initInput) {
         // Init input rating
-        $(BD.inputRating).rating({
+        $(input).rating({
           size: "xs",
           step: 1,
           showCaption: false,
@@ -65,12 +69,16 @@ $(document).ready(function() {
       }
       else {
         // Update input rating
-        $(BD.inputRating).rating("refresh", {
-          disabled: disableInput
-        });
+        BD.disableInputRating(input);
       }
     },
+    disableInputRating: function(input) {
+      $(input).rating("refresh", {
+        disabled: true
+      });
+    },
     inputRating: $("#input-rating"),
+    inputMyRating: $("#input-my-rating"),
     behaviorId: getUrlParameters("bid")
   };
 
