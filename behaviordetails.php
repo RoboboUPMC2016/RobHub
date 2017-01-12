@@ -133,6 +133,12 @@ html::tag("div");
                 html::add_attributes(["data-toggle" => "tab", "href" => "#videos"]);
                 html::tag("a", "Vidéos");
               html::close();
+
+              // QR code
+              html::tag("li");
+                html::add_attributes(["data-toggle" => "tab", "href" => "#qrcode"]);
+                html::tag("a", "QR code");
+              html::close();
             html::close();
 
             // Tabs content
@@ -274,8 +280,24 @@ html::tag("div");
                   html::close();
                 }
               html::close();
-            html::close();
 
+              // QR code
+              html::add_attributes(["id" => "qrcode", "class" => "tab-pane fade in"]);
+              html::tag("div");
+                require_once __DIR__ . "/php/lib/phpqrcode/qrlib.php";
+                require_once __DIR__ . "/php/src/util/UrlUtils.php";
+                ob_start();
+                  html::tag("p", "Scan this QR code from your phone to go to this page.");
+                  // Create qrcode
+                  QRCode::png(UrlUtils::getCurrentURL(), null, "H", 5, 2);
+
+                  // Create qrcode image
+                  $qrcodeStr = "data:image/png;base64," . base64_encode(ob_get_contents());
+                  html::add_attribute("src", $qrcodeStr);
+                  html::single_tag("img");
+                ob_end_clean();
+              html::close();
+            html::close();
           html::close();
         html::close();
     }
