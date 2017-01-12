@@ -64,13 +64,13 @@ html::tag("div");
     html::tag("div");
       html::add_attribute("class", "col-md-8 col-md-offset-2 text-center");
       html::tag("div");
-          html::tag("h2", "Connexion");
+          html::tag("h2", "Sign in");
 
           // Invalid id/pass
           if (isset($success) && !$success)
           {
             html::add_attribute("class", "errorMsg");
-            html::tag("span", "Identifiant ou mot de passe incorect.");
+            html::tag("span", "Invalid login or password.");
           }
       html::close();
     html::close();
@@ -87,7 +87,7 @@ html::tag("div");
 
           // Login
           html::insert_code(HtmlWriterUtils::createLabelInput(
-            "Identifiant",
+            "Login",
             "text",
             SigninForm::LOGIN,
             isset($_POST[SigninForm::LOGIN]) ? $_POST[SigninForm::LOGIN] : null
@@ -95,7 +95,7 @@ html::tag("div");
 
           // Password
           html::insert_code(HtmlWriterUtils::createLabelInput(
-            "Mot de passe",
+            "Password",
             "password",
             SigninForm::PASSWORD,
             null
@@ -103,7 +103,7 @@ html::tag("div");
 
           // Submit button
           html::nl();
-          html::insert_code(HtmlWriterUtils::createSubmitBtn(SigninForm::BTN_SIGNIN, "Se connecter"));
+          html::insert_code(HtmlWriterUtils::createSubmitBtn(SigninForm::BTN_SIGNIN, "Sign in"));
 
         html::close();
       html::close();

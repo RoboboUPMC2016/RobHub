@@ -19,10 +19,7 @@ html::tag("footer");
       html::close();
 
       html::add_attribute("class", "textJustify");
-      html::tag("p", "RobApp est l'application permettant de donner un comportement à votre Robobo.
-        Avec RobApp vous donnez au Robobo les comportements que vous créez avec RobDev.
-        Vous pouvez aussi télécharger les comportements partagés sur RobHub directement
-        depuis votre smartphone.");
+      html::tag("p", "RobApp is the application making it possible to give a behavior to your Robobo. With RobApp you give to your Robobo the behaviors that you create with RobDev. You can also download the behaviors shared on RobHub directly from your smartphone.");
     html::close();
 
 
@@ -38,8 +35,8 @@ html::tag("footer");
       html::close();
 
       html::add_attribute("class", "textJustify");
-      html::tag("p", " RobHub est le reseau social de votre robobo. Vous pouvez partager des comportements
-        créés avec le framework RobDev, mais aussi des vidéos et des photos.");
+      html::tag("p", "RobHub is the social network for your Robobo. You can share behaviors
+        created with the RobDev framework but also videos to show a demonstration of the behaviors.");
     html::close();
 
 
@@ -54,8 +51,8 @@ html::tag("footer");
         html::tag("a", "RobDev");
       html::close();
 
-      html::insert_code('<p class="textJustify">RobDev est un framework pour créer les comportements de votre Robobo. Pour savoir comment 
-        créer un comportement rendez vous sur le <a href="https://github.com/RoboboUPMC2016/RobDev/wiki">Wiki du projet RobDev</a>.</p>');
+      html::insert_code('<p class="textJustify">RobDev is a framework to create behaviors for your Robobo. To know how
+      to create a behavior go to <a href="https://github.com/RoboboUPMC2016/RobDev/wiki">the Wiki of the RobDev project</a>.</p>');
     html::close();
 
 

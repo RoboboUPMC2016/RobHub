@@ -20,7 +20,7 @@ html::tag("div");
     html::tag("div");
       html::add_attribute("class", "col-md-8 col-md-offset-2 text-center");
       html::tag("div");
-          $welcomeMsg = "Bienvenue sur le réseau RobHub";
+          $welcomeMsg = "Welcome to RobHub";
 
           // Add login in welcome message
           require_once __DIR__  . "/php/src/enum/SessionData.php";

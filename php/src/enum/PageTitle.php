@@ -1,11 +1,11 @@
 <?php
 abstract class PageTitle
 {
-  const HOME = "Accueil";
-  const SIGNUP = "Inscription";
-  const SIGNIN = "Connexion";
-  const LOGOUT = "Déconnexion";
-  const ADD_BEHAVIOR = "Ajout comportement";
-  const BEHAVIOR_DETAILS = "Comportement";
+  const HOME = "Home";
+  const SIGNUP = "Sign up";
+  const SIGNIN = "Sign in";
+  const LOGOUT = "Log out";
+  const ADD_BEHAVIOR = "Add behavior";
+  const BEHAVIOR_DETAILS = "Behavior";
 }
 ?>

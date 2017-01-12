@@ -78,7 +78,7 @@ html::tag("div");
     html::tag("div");
       html::add_attribute("class", "col-md-8 col-md-offset-2 text-center");
       html::tag("div");
-          html::tag("h2", "Ajouter un comportement");
+          html::tag("h2", "Add a behavior");
 
           if (isset($fileUploadedSuccess))
           {
@@ -86,13 +86,13 @@ html::tag("div");
               if ($fileUploadedSuccess)
               {
                 html::add_attribute("class", "successMsg");
-                html::tag("span", "Le comportement a bien été mis en ligne.");
+                html::tag("span", "The behavior has correctly been uploaded.");
               }
               // Upload has failed
               else
               {
                 html::add_attribute("class", "errorMsg");
-                html::tag("span", "Le comportement n'a pas pu être mis en ligne.");
+                html::tag("span", "The behavior could not be uploaded.");
               }
           }
       html::close();  
@@ -143,7 +143,7 @@ html::tag("div");
           // Add file
           $ACCEPTED_FILES = "." . AddBehaviorForm::ACCEPTED_FILES;
           html::insert_code(HtmlWriterUtils::createLabelInputFile(
-            "Fichier du comportement (" . $ACCEPTED_FILES . ")",
+            "Behavior file (" . $ACCEPTED_FILES . ")",
             $ACCEPTED_FILES,
             AddBehaviorForm::BEHAVIOR_FILE,
             isset($_POST[AddBehaviorForm::BEHAVIOR_FILE]) ? $_POST[AddBehaviorForm::BEHAVIOR_FILE] : null,
@@ -152,7 +152,7 @@ html::tag("div");
 
           // Add behavior button
           html::nl();
-          html::insert_code(HtmlWriterUtils::createSubmitBtn(AddBehaviorForm::BTN_ADD, "Ajouter"));
+          html::insert_code(HtmlWriterUtils::createSubmitBtn(AddBehaviorForm::BTN_ADD, "Add"));
         html::close();
       html::close();
     html::close();

@@ -63,17 +63,17 @@ html::tag("div");
         // Id not set
         if ($bidIsEmpty)
         {
-          html::tag("span", "L'identifiant du comportement n'a pas été spécifié.");
+          html::tag("span", "The behavior identifier has not been specified.");
         }
         // Behavior not found
         else if ($behavior === null)
         {
-          html::tag("span", "Le comportement n'existe pas.");
+          html::tag("span", "The behavior does not exist.");
         }
         // Behavior found
         else
         {
-          html::tag("h2", "Détails du comportement");
+          html::tag("h2", "Details of the behavior");
         }
       html::close();
     html::close();
@@ -90,7 +90,7 @@ html::tag("div");
             html::tag("h2", $behavior->label);
 
             // Creator + date
-            html::insert_code("<h5><i class='fa fa-clock-o' aria-hidden='true'></i>&nbsp;Publié par " . $behavior->username .", " . $behavior->timestamp . "</h5>");
+            html::insert_code("<h5><i class='fa fa-clock-o' aria-hidden='true'></i>&nbsp;Posted by" . $behavior->username .", " . $behavior->timestamp . "</h5>");
 
             // Description
             html::add_attribute("class", "textJustify");
@@ -165,11 +165,11 @@ html::tag("div");
 
                 // Download java file
                 html::add_attributes(["class" => "btn btn-default", "href" => BehaviorFileUtils::getExternJavaPath($strBid)]);
-                html::tag("a", "Télécharger .java");
+                html::tag("a", "Download .java");
 
                 // Download dex file
                 html::add_attributes(["class" => "btn btn-default", "href" => BehaviorFileUtils::getExternDexPath($strBid)]);
-                html::tag("a", "Télécharger .dex");
+                html::tag("a", "Download .dex");
               html::close();
 
               // Videos
@@ -224,7 +224,7 @@ html::tag("div");
                 // No video uploaded
                 else
                 {
-                  html::tag("p", "Aucune vidéo n'a été mise en ligne.");
+                  html::tag("p", "No video has been posted.");
                 }
 
                 require_once __DIR__ . "/php/src/enum/SessionData.php";
@@ -261,13 +261,13 @@ html::tag("div");
                     if (isset($uploadSuccess) && $uploadSuccess)
                     {
                       html::add_attribute("class", "successMsg");
-                      html::tag("span", "La vidéo a bien été mise en ligne.");
+                      html::tag("span", "The video has correctly been uploaded.");
                     }
 
                     // Add video
                     $ACCEPTED_FILES = "." . UploadVideoForm::ACCEPTED_FILES;
                     html::insert_code(HtmlWriterUtils::createLabelInputFile(
-                      "Fichier vidéo (" . $ACCEPTED_FILES . ")",
+                      "Video file (" . $ACCEPTED_FILES . ")",
                       $ACCEPTED_FILES,
                       UploadVideoForm::VIDEO_FILE,
                       null,
@@ -276,7 +276,7 @@ html::tag("div");
 
                     // Add video button
                     html::nl();
-                    html::insert_code(HtmlWriterUtils::createSubmitBtn(UploadVideoForm::BTN_ADD, "Ajouter"));
+                    html::insert_code(HtmlWriterUtils::createSubmitBtn(UploadVideoForm::BTN_ADD, "Add"));
                   html::close();
                 }
               html::close();
@@ -287,7 +287,7 @@ html::tag("div");
                 require_once __DIR__ . "/php/lib/phpqrcode/qrlib.php";
                 require_once __DIR__ . "/php/src/util/UrlUtils.php";
                 ob_start();
-                  html::tag("p", "Scan this QR code from your phone to go to this page.");
+                  html::tag("p", "Scan this QR code from your smartphone to go to this page.");
                   // Create qrcode
                   QRCode::png(UrlUtils::getCurrentURL(), null, "H", 5, 2);
 

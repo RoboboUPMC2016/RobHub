@@ -75,7 +75,7 @@ html::tag("div");
     html::tag("div");
       html::add_attribute("class", "col-md-8 col-md-offset-2 text-center");
       html::tag("div");
-          html::tag("h2", "Inscription");
+          html::tag("h2", "Sign up");
       html::close();
     html::close();
 
@@ -109,7 +109,7 @@ html::tag("div");
 
           // Login
           html::insert_code(HtmlWriterUtils::createLabelInput(
-            "Identifiant",
+            "Login",
             "text",
             SignupForm::LOGIN,
             isset($_POST[SignupForm::LOGIN]) ? $_POST[SignupForm::LOGIN] : null,
@@ -118,7 +118,7 @@ html::tag("div");
 
           // Firstname
           html::insert_code(HtmlWriterUtils::createLabelInput(
-            "Prénom",
+            "First name",
             "text",
             SignupForm::FIRSTNAME,
             isset($_POST[SignupForm::FIRSTNAME]) ? $_POST[SignupForm::FIRSTNAME] : null,
@@ -127,7 +127,7 @@ html::tag("div");
 
           // Lastname
           html::insert_code(HtmlWriterUtils::createLabelInput(
-            "Nom",
+            "Last name",
             "text",
             SignupForm::LASTNAME,
             isset($_POST[SignupForm::LASTNAME]) ? $_POST[SignupForm::LASTNAME] : null,
@@ -136,7 +136,7 @@ html::tag("div");
 
           // Password
           html::insert_code(HtmlWriterUtils::createLabelInput(
-            "Mot de passe",
+            "Password",
             "password",
             SignupForm::PASSWORD,
             null,
@@ -145,7 +145,7 @@ html::tag("div");
 
           // Confirm password
           html::insert_code(HtmlWriterUtils::createLabelInput(
-            "Confirmation du mot de passe",
+            "Confirm password",
             "password",
             SignupForm::CONFIRM_PASSWORD,
             null,
@@ -154,7 +154,7 @@ html::tag("div");
 
           // Signup button
           html::nl();
-          html::insert_code(HtmlWriterUtils::createSubmitBtn(SignupForm::BTN_SIGNUP, "S'inscrire"));
+          html::insert_code(HtmlWriterUtils::createSubmitBtn(SignupForm::BTN_SIGNUP, "Sign up"));
         html::close();
       html::close();
     html::close();

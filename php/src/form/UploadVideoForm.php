@@ -43,7 +43,7 @@ class UploadVideoForm
       // Behavior not found = invalid id
       if (!BehaviorDao::getById($this->behaviorId))
       {
-        $this->errorMessages[self::BEHAVIOR_ID] = "L'identifiant du comportement n'existe pas.";
+        $this->errorMessages[self::BEHAVIOR_ID] = "The behavior identifier does not exist.";
         return false;
       }
 
@@ -55,14 +55,14 @@ class UploadVideoForm
         // Check if a file has been selected
         if (!isset($this->videoFile) || $this->videoFile["error"] == UPLOAD_ERR_NO_FILE)
         {
-            $this->errorMessages[self::VIDEO_FILE] = "Aucun fichier n'a été sélectionné.";
+            $this->errorMessages[self::VIDEO_FILE] = "No files have been selected.";
             return false;
         }
 
         // Test if it is a java file, maybe we need to do a stronger verification
         if (strcasecmp(pathinfo($this->videoFile["name"], PATHINFO_EXTENSION), self::ACCEPTED_FILES) !== 0)
         {
-            $this->errorMessages[self::VIDEO_FILE] = "Le fichier doit être de type ." . self::ACCEPTED_FILES . ".";
+            $this->errorMessages[self::VIDEO_FILE] = "The file must be a ." . self::ACCEPTED_FILES . " file.";
             return false;
         }
 
