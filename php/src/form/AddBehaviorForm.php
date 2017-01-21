@@ -17,7 +17,10 @@ class AddBehaviorForm
 
   // Socket info
   //const CONFIG_PATH = __DIR__ . "/../../../config/config-socket.json";
-  const BUFFER_CODE = 3;
+  const BUFFER_CODE = 5;
+  const BUFFER_FILE_SIZE = 8;
+  const SKIP_NEXT_BYTE = 1;
+  const ERROR = -1;
   private static $socketFactory = null;
   private static $socketAddress = null;
 
@@ -84,27 +87,33 @@ class AddBehaviorForm
           // Send number of files (normally it should always be 1)
           $socket->write("1\n");
 
-          // Check if number of file is valid (should always be OK)
-          $code = $socket->read(self::BUFFER_CODE);
-          if (intval($code) === -1)
+          // Check if number of files is valid (should always OK be as we only submit one file)
+          $code = $socket->read(self::BUFFER_CODE, PHP_NORMAL_READ);
+          if (intval($code) === self::ERROR)
           {
               $this->errorMessages[self::BEHAVIOR_FILE] = "The number of files is invalid.";
               $socket->close();
               return null;
           }
+          // Skip "\n" from previous read
+          $socket->read(self::SKIP_NEXT_BYTE);
+
 
           // Send file name and file size
           $socket->write($this->file["name"] . "\n");
           $socket->write($this->file["size"] . "\n");
 
           // Check if file is valid
-          $code = $socket->read(self::BUFFER_CODE);
-          if (intval($code) === -1)
+          $code = $socket->read(self::BUFFER_CODE, PHP_NORMAL_READ);
+          if (intval($code) === self::ERROR)
           {
-              $this->errorMessages[self::BEHAVIOR_FILE] = "The name or the size of the file is invalid.";
+              $this->errorMessages[self::BEHAVIOR_FILE] = "The name or the size (must be less than 1 Mb) of the file is invalid.";
               $socket->close();
               return null;
           }
+          // Skip "\n" from previous read
+          $socket->read(self::SKIP_NEXT_BYTE);
+
 
           // Send java source code
           $sourceCode = file_get_contents($this->file["tmp_name"], FILE_USE_INCLUDE_PATH);
@@ -112,16 +121,38 @@ class AddBehaviorForm
 
           // Check if compilation of source code has succeeded
           $code = $socket->read(self::BUFFER_CODE);
-          if (intval($code) === -1)
+          if (intval($code) === self::ERROR)
           {
-              $this->errorMessages[self::BEHAVIOR_FILE] = "The compilation of the java file has failed.";
+              // Skip "\n" from previous read
+              $socket->read(self::SKIP_NEXT_BYTE);
+
+              // Get size of the error file
+              $errorFileSize = intval($socket->read(self::BUFFER_FILE_SIZE, PHP_NORMAL_READ));
+
+              // Get content of the error file 
+              $this->errorMessages[self::BEHAVIOR_FILE] = "Java compilation has failed :\n";
+              $socket->read(self::SKIP_NEXT_BYTE);
+              while (($buf = $socket->read($errorFileSize)) !== "")
+              {
+                $this->errorMessages[self::BEHAVIOR_FILE] .= $buf;
+              }
+
               $socket->close();
               return null;
           }
+          $socket->read(self::SKIP_NEXT_BYTE);
 
-          // Get size and content of the dex file
-          $dexFileSize = intval($socket->read(128));
-          $dexFileContent = $socket->read($dexFileSize);
+
+          // Get size of the dex file.
+          $dexFileSize = intval($socket->read(self::BUFFER_FILE_SIZE, PHP_NORMAL_READ));
+          $socket->read(self::SKIP_NEXT_BYTE);
+
+          // Get content of the dex file
+          $dexFileContent = "";
+          while (($buf = $socket->read($dexFileSize)) !== "")
+          {
+            $dexFileContent .= $buf;
+          }
 
           $socket->close();
 
