@@ -1,6 +1,17 @@
 <?php
 class UrlUtils
 {
+  public static function getBaseUrl()
+  {
+    $baseUrl = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
+    $baseUrl .= $_SERVER["SERVER_NAME"];
+
+    // Add robhub if localhost
+    $baseUrl .= $_SERVER["SERVER_NAME"] === "localhost" ? "/robhub/" : "/";
+
+    return $baseUrl;
+  }
+
   public static function getCurrentURL()
   {
     $currentURL = (@$_SERVER["HTTPS"] == "on") ? "https://" : "http://";
@@ -13,6 +24,11 @@ class UrlUtils
  
     $currentURL .= $_SERVER["REQUEST_URI"];
     return $currentURL;
+  }
+
+  public static function getBehaviorDetailsUrl($behaviorId)
+  {
+    return UrlUtils::getBaseUrl() . "behaviordetails.php?bid=" . $behaviorId;
   }
 }
 ?>

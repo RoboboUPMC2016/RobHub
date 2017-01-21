@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . "/UrlUtils.php";
+
 class BehaviorFileUtils
 {
     const TARGET_BEHAVIORS = "behaviors/";
@@ -87,7 +89,7 @@ class BehaviorFileUtils
         // Get file
         foreach (glob($targetDirId . "*" . $ext) as $filename)
         {
-            return self::constructBaseUrl() . self::TARGET_BEHAVIORS . $id . "/" . basename($filename);
+            return UrlUtils::getBaseUrl() . self::TARGET_BEHAVIORS . $id . "/" . basename($filename);
         }
 
         // File not found
@@ -113,18 +115,12 @@ class BehaviorFileUtils
 
           foreach ($videos as $video)
           {
-            array_push($videosURL, self::constructBaseUrl() .  self::TARGET_BEHAVIORS . $id . "/" . self::TARGET_VIDEOS . $usernameDir . "/" . $video);
+            array_push($videosURL, UrlUtils::getBaseUrl() .  self::TARGET_BEHAVIORS . $id . "/" . self::TARGET_VIDEOS . $usernameDir . "/" . $video);
           }
         }
       }
 
       return $videosURL;
-    }
-
-    private static function constructBaseUrl()
-    {
-      $protocol = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off" ? "https" : "http";
-      return $protocol . "://" . $_SERVER["SERVER_NAME"] . "/robhub/";
     }
 
     private static function targetDirIdPath($id)
