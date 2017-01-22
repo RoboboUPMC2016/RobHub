@@ -120,7 +120,7 @@ class AddBehaviorForm
           $socket->write($sourceCode . "\n");
 
           // Check if compilation of source code has succeeded
-          $code = $socket->read(self::BUFFER_CODE);
+          $code = $socket->read(self::BUFFER_CODE, PHP_NORMAL_READ);
           if (intval($code) === self::ERROR)
           {
               // Skip "\n" from previous read
