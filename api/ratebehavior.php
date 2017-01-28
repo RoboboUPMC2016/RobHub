@@ -7,7 +7,8 @@ const MAX_MARK = 5;
 const NOT_AUTHENTICATED = "User is not authenticated";
 const MISSING_PARAMETERS = "Missing bid and/or mark parameters";
 const BEHAVIOR_ALREADY_RATED = "The behavior has already been rated";
-const INVALID_MARK = "Invalid mark parameter (not in [" . MIN_MARK . ", " . MAX_MARK . "])";
+//const INVALID_MARK = "Invalid mark parameter (not in [" . MIN_MARK . ", " . MAX_MARK . "])";
+const INVALID_MARK = "Invalid mark parameter (not in [1, 5])";
 const INVALID_BEHAVIOR_ID = "Invalid bid parameter";
 const OK = "The behavior has been rated";
 

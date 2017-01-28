@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . "/../php/src/util/BehaviorFileUtils.php";
 require_once __DIR__ . "/../php/src/database/dao/BehaviorDao.php";
+require_once __DIR__ . "/../php/src/database/dao/MarkDao.php";
 require_once __DIR__ . "/../php/src/util/UrlUtils.php";
 
 
@@ -19,7 +20,9 @@ foreach ($behaviors as $behavior)
     [
       "id" => $behavior->id,
       "label" => $behavior->label,
+      "desc" => $behavior->description,
       "dex_url" => $dexUrl,
+      "mark" => MarkDao::getAverageByBehaviorId($behavior->id),
       "filename" => end($contentDexUrl),
       "behaviordetails_url" => UrlUtils::getBehaviorDetailsUrl($behavior->id)
     ]
