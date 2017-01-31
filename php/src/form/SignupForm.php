@@ -21,6 +21,10 @@ class SignupForm
   // Criteria
   const MIN_CHAR_PWD = 4;
   const MIN_CHAR_LOGIN = 3;
+  const MAX_CHAR_LOGIN = 20;
+  const MAX_CHAR_FIRSTNAME = 30;
+  const MAX_CHAR_LASTNAME = 30;
+
 
   public function __construct($login, $firstname, $lastname, $password, $confirmPassword)
   {
@@ -56,9 +60,10 @@ class SignupForm
   private function isLoginValid()
   {
       // Check length
-      if (strlen($this->login) < self::MIN_CHAR_LOGIN)
+      $nbCharsLogin = strlen($this->login);
+      if ($nbCharsLogin < self::MIN_CHAR_LOGIN || $nbCharsLogin > self::MAX_CHAR_LOGIN)
       {
-          $this->errorMessages[self::LOGIN] = "The login must at least contains " . self::MIN_CHAR_LOGIN . " characters.";
+          $this->errorMessages[self::LOGIN] = "The login must have between " . self::MIN_CHAR_LOGIN . " and " . self::MAX_CHAR_LOGIN ." characters.";
           return false;
       }
 
@@ -89,6 +94,12 @@ class SignupForm
           return false;
       }
 
+      if (strlen($this->firstname) > self::MAX_CHAR_FIRSTNAME)
+      {
+          $this->errorMessages[self::FIRSTNAME] = "The firstname can't exceed " . self::MAX_CHAR_FIRSTNAME . " characters.";
+          return false;
+      }
+
       // Check format
       if (!preg_match("/^[a-zA-Z]+$/", $this->firstname))
       {
@@ -105,6 +116,12 @@ class SignupForm
       if (empty($this->lastname))
       {
           $this->errorMessages[self::LASTNAME] = "The last name must be specified.";
+          return false;
+      }
+
+      if (strlen($this->lastname) > self::MAX_CHAR_LASTNAME)
+      {
+          $this->errorMessages[self::LASTNAME] = "The lastname can't exceed " . self::MAX_CHAR_LASTNAME . " characters.";
           return false;
       }
 

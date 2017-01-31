@@ -28,9 +28,11 @@ class AddBehaviorForm
 
   // All criteria when checking inputs
   const MIN_CHAR_LABEL = 2;
+  const MAX_CHAR_LABEL = 50;
   const LABEL_REGEX = "/^[a-zA-Z]+$/";
 
   const MIN_CHAR_DESC = 2;
+  const MAX_CHAR_DESC = 500;
 
   const ACCEPTED_FILES = "java";
 
@@ -166,10 +168,11 @@ class AddBehaviorForm
 
   private function isLabelValid()
   {
-      // Check min length
-      if (strlen($this->label) < self::MIN_CHAR_LABEL)
+      // Check length
+      $nbCharsLabel = strlen($this->label);
+      if ($nbCharsLabel < self::MIN_CHAR_LABEL || $nbCharsLabel > self::MAX_CHAR_LABEL)
       {
-          $this->errorMessages[self::LABEL] = "The label must at least contains " . self::MIN_CHAR_LABEL . " characters.";
+          $this->errorMessages[self::LABEL] = "The label must have between " . self::MIN_CHAR_LABEL . " and " . self::MAX_CHAR_LABEL ." characters.";
           return false;
       }
 
@@ -185,10 +188,11 @@ class AddBehaviorForm
 
   private function isDescValid()
   {
-      // Check min length
-      if (strlen($this->desc) < self::MIN_CHAR_DESC)
+      // Check length
+      $nbCharsDesc = strlen($this->desc);
+      if ($nbCharsDesc < self::MIN_CHAR_DESC || $nbCharsDesc > self::MAX_CHAR_DESC)
       {
-          $this->errorMessages[self::DESC] = "The description must at least contains " . self::MIN_CHAR_DESC . " characters.";
+          $this->errorMessages[self::DESC] = "The description must have between " . self::MIN_CHAR_DESC . " and " . self::MAX_CHAR_DESC ." characters.";
           return false;
       }
 
