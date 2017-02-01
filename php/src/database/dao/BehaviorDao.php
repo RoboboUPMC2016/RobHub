@@ -2,8 +2,20 @@
 require_once __DIR__ . "/../DB.php";
 require_once __DIR__ . "/../entity/Behavior.php";
 
+/**
+ * The class BehaviorDao provides functions to manipulate
+ * the table Behavior from the database.
+ */
 class BehaviorDao
 {  
+    /**
+     * Add a new behavior entry in the database.
+     *
+     * @param string $label  The label of the behavior.
+     * @param string $description The description of the behavior.
+     * @param string $username The author of the behavior.
+     * @return integer The last insert Id or -1 in case of error.
+     */
     public static function add($label, $description, $username)
     {
       $stmt = DB::prepare("INSERT INTO Behavior (Behavior_label, Behavior_description, User_username, Behavior_timestamp) VALUES (?, ?, ?, ?)");
@@ -15,6 +27,11 @@ class BehaviorDao
       return -1;
     }
 
+    /**
+     * Get all the behaviors.
+     *
+     * @return Behavior[] $behaviors return all the behaviors.
+     */
     public static function getAll()
     {
       $behaviors = [];
@@ -36,6 +53,12 @@ class BehaviorDao
       return $behaviors;
     }
 
+    /**
+     * Get the behavior with a given behavior Id.
+     *
+     * @param integer $id The Id of the behavior.
+     * @return Behavior|null $behaviors The behavior or null if not found.
+     */
     public static function getById($id)
     {
       $row = DB::run("SELECT * FROM Behavior WHERE Behavior_id=?", [$id])->fetch();

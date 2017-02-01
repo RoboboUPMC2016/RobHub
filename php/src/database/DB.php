@@ -1,18 +1,55 @@
 <?php
+
+/**
+ * The class DB allows to run SQL commands.
+ */
 class DB
 {
+  /**
+   * The instance of the database (singleton).
+   */
   protected static $instance = null;
 
-  protected function __construct() {}
-  protected function __clone() {}
-
-  //const CONFIG_PATH = __DIR__ . "/../../../config/config-database.json";
+  /**
+   * The host key.
+   */
   const HOST = "host";
+
+  /**
+   * The dbname key.
+   */
   const NAME = "dbname";
+
+  /**
+   * The user key.
+   */
   const USER = "user";
+
+  /**
+   * The password key.
+   */
   const PASSWORD = "password";
+
+  /**
+   * The charset key.
+   */
   const CHARSET = "dbchar";
 
+  /**
+   * Remove constructor.
+   */
+  protected function __construct() {}
+
+  /**
+   * Remove copy.
+   */
+  protected function __clone() {}
+
+  /**
+   * Get the instance of the database.
+   * 
+   * @return PDO The database instance.
+   */
   public static function instance()
   {
       if (self::$instance === null)
@@ -37,6 +74,13 @@ class DB
       return call_user_func_array(array(self::instance(), $method), $args);
   }
 
+  /**
+   * Execute a SQL command.
+   *
+   * @param  string $sql The SQL command to execute.
+   * @param mixed[] $args The arguments of the PDOStatement.
+   * @return PDOStatement The PDOStatement resulting.
+   */
   public static function run($sql, $args = [])
   {
       $stmt = self::instance()->prepare($sql);
