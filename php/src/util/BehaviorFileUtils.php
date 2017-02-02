@@ -38,11 +38,11 @@ class BehaviorFileUtils
   const REGEX_HIDDEN_FILES = "/^([^.])/";
   
   /**
-  * Create the Java file corresponding to the java file behavior uploaded.
-  *
-  * @param integer $id The Id of the behavior.
-  * @param $_FILES $postFile The Java file uploaded.
-  */
+   * Create the Java file corresponding to the java file behavior uploaded.
+   *
+   * @param integer $id The Id of the behavior.
+   * @param $_FILES $postFile The Java file uploaded.
+   */
   public static function createJavaFile($id, $postFile)
   {
     // Create behaviors/id
@@ -54,12 +54,12 @@ class BehaviorFileUtils
 
   
   /**
-  * Create the video file corresponding to the video uploaded.
-  *
-  * @param integer $id The Id of the behavior.
-  * @param string $username The username of the uploader (who is an user).
-  * @param $_FILES $postFile The video file uploaded.
-  */
+   * Create the video file corresponding to the video uploaded.
+   *
+   * @param integer $id The Id of the behavior.
+   * @param string $username The username of the uploader (who is an user).
+   * @param $_FILES $postFile The video file uploaded.
+   */
   public static function createVideoFile($id, $username, $postFile)
   {
     // Create behaviors/id
@@ -83,12 +83,12 @@ class BehaviorFileUtils
   }
 
   /**
-  * Create the Dex file.
-  *
-  * @param integer $id The Id of the behavior.
-  * @param string $fileName The name of the Dex file.
-  * @param dexContent $dexContent The content of the Dex file.
-  */
+   * Create the Dex file.
+   *
+   * @param integer $id The Id of the behavior.
+   * @param string $fileName The name of the Dex file.
+   * @param dexContent $dexContent The content of the Dex file.
+   */
   public static function createDexFile($id, $fileName, $dexContent)
   {
     $targetDirId = self::createTargetDirId($id);
@@ -98,11 +98,11 @@ class BehaviorFileUtils
   }
 
   /**
-  * Get the content of the Java file.
-  *
-  * @param integer $id The Id of the behavior.
-  * @return string The content of the Java file.
-  */
+   * Get the content of the Java file.
+   *
+   * @param integer $id The Id of the behavior.
+   * @return string The content of the Java file.
+   */
   public static function getJavaContent($id)
   {
     $javaPath = self::getInternJavaPath($id);
@@ -110,11 +110,11 @@ class BehaviorFileUtils
   }
 
   /**
-  * Get the intern(local) Java path of the Java file corresponding to the behavior.
-  *
-  * @param integer $id The Id of the behavior.
-  * @return string|null The intern(local) Java path of the Java file corresponding to the behavior or null if not found.
-  */
+   * Get the intern(local) Java path of the Java file corresponding to the behavior.
+   *
+   * @param integer $id The Id of the behavior.
+   * @return string|null The intern(local) Java path of the Java file corresponding to the behavior or null if not found.
+   */
   public static function getInternJavaPath($id)
   {
     $targetDirId = self::targetDirIdPath($id);
@@ -130,34 +130,34 @@ class BehaviorFileUtils
   }
 
   /**
-  * Get the extern(url) Java path of the Java file corresponding to the behavior.
-  *
-  * @param integer $id The Id of the behavior.
-  * @return string|null The extern(url) Java path of the Java file corresponding to the behavior or null if not found.
-  */
+   * Get the extern(url) Java path of the Java file corresponding to the behavior.
+   *
+   * @param integer $id The Id of the behavior.
+   * @return string|null The extern(url) Java path of the Java file corresponding to the behavior or null if not found.
+   */
   public static function getExternJavaPath($id)
   {
     return self::getExternPath($id, self::JAVA_EXT);
   }
 
   /**
-  * Get the extern(url) Dex path of the Dex file corresponding to the behavior.
-  *
-  * @param integer $id The Id of the behavior.
-  * @return string|null The extern(url) path of the Dex file corresponding to the behavior or null if not found.
-  */
+   * Get the extern(url) Dex path of the Dex file corresponding to the behavior.
+   *
+   * @param integer $id The Id of the behavior.
+   * @return string|null The extern(url) path of the Dex file corresponding to the behavior or null if not found.
+   */
   public static function getExternDexPath($id)
   {
     return self::getExternPath($id, self::DEX_EXT);
   }
 
   /**
-  * Get the extern(url) path of the file corresponding to the behavior.
-  *
-  * @param integer $id The Id of the behavior.
-  * @param string $ext The extension of the file.
-  * @return string|null The extern(url) path of the file corresponding to the behavior or null if not found.
-  */
+   * Get the extern(url) path of the file corresponding to the behavior.
+   *
+   * @param integer $id The Id of the behavior.
+   * @param string $ext The extension of the file.
+   * @return string|null The extern(url) path of the file corresponding to the behavior or null if not found.
+   */
   private static function getExternPath($id, $ext)
   {
     $targetDirId = self::targetDirIdPath($id);
@@ -173,11 +173,11 @@ class BehaviorFileUtils
   }
 
   /**
-  * Get the URLs videos for the behavrior.
-  *
-  * @param integer $id The Id of the behavior.
-  * @return string[] The URLs videos for the behavrior.
-  */
+   * Get the URLs videos for the behavrior.
+   *
+   * @param integer $id The Id of the behavior.
+   * @return string[] The URLs videos for the behavrior.
+   */
   public static function getVideosURL($id)
   {
     $videosURL = [];
@@ -206,26 +206,42 @@ class BehaviorFileUtils
   }
 
   /**
-  * Get the path of the target directory of the behavior.
-  *
-  * @param integer $id The Id of the behavior.
-  * @return string The path of the target directory of the behavior.
-  */
-  private static function targetDirIdPath($id)
+   * Get the target directory behaviors.
+   *
+   * @return string The target directory behaviors.
+   */
+  private static function targetDirBehaviors()
   {
-    return __DIR__ . "/../../../" . self::TARGET_BEHAVIORS . $id . "/";
+    return __DIR__ . "/../../../" . self::TARGET_BEHAVIORS;
   }
 
   /**
-  * Create the target directory of the behavior.
-  *
-  * @param integer $id The Id of the behavior.
-  * @return string The path of the target directory of the behavior.
-  */
+   * Get the path of the target directory of the behavior.
+   *
+   * @param integer $id The Id of the behavior.
+   * @return string The path of the target directory of the behavior.
+   */
+  private static function targetDirIdPath($id)
+  {
+    return BehaviorFileUtils::targetDirBehaviors() . $id . "/";
+  }
+
+  /**
+   * Create the target directory of the behavior.
+   *
+   * @param integer $id The Id of the behavior.
+   * @return string The path of the target directory of the behavior.
+   */
   private static function createTargetDirId($id)
   {
     // Create path => behaviors/number_id/
     $targetDirId = self::targetDirIdPath($id);
+
+    // Create behaviors if it doesn't exist
+    if (!is_dir(BehaviorFileUtils::targetDirBehaviors()))
+    {
+      mkdir(BehaviorFileUtils::targetDirBehaviors());
+    }
 
     // Create folder if it doesn't exists
     if (!is_dir($targetDirId))
@@ -237,12 +253,12 @@ class BehaviorFileUtils
   }
 
   /**
-  * Create the target directory video of the behavior.
-  *
-  * @param string $targetDirId The path of the target directory of the behavior.
-  * @param string $username The username of the uploader (who is an user).
-  * @return string The path of the target directory video of the behavior.
-  */
+   * Create the target directory video of the behavior.
+   *
+   * @param string $targetDirId The path of the target directory of the behavior.
+   * @param string $username The username of the uploader (who is an user).
+   * @return string The path of the target directory video of the behavior.
+   */
   private static function createTargetDirVideo($targetDirId, $username)
   {
     // Create path => behaviors/id/videos/
