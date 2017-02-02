@@ -90,18 +90,22 @@ html::tag("div");
             html::tag("h2", $behavior->label);
 
             // Creator + date
-            html::insert_code("<h5><i class='fa fa-clock-o' aria-hidden='true'></i>&nbsp;Posted by" . $behavior->username .", " . $behavior->timestamp . "</h5>");
+            html::insert_code("<h5><i class='fa fa-clock-o' aria-hidden='true'></i>&nbsp;Posted by " . $behavior->username .", " . $behavior->timestamp . "</h5>");
 
             // Description
             html::add_attribute("class", "textJustify");
             html::tag("p", $behavior->description);
 
-            // My rating
-            html::tag("label", "My rating");
-            html::add_attributes(["id" => "input-my-rating"]);
-            html::single_tag("input");
-
-            html::br();
+            require_once __DIR__ . "/php/src/enum/SessionData.php";
+            // Only show upload video if the user is authenticated
+            if (isset($_SESSION[SessionData::LOGIN]))
+            {
+              // My rating
+              html::tag("label", "My rating");
+              html::add_attributes(["id" => "input-my-rating"]);
+              html::single_tag("input");
+              html::br();
+            }
 
             // Rating
             html::tag("label", "Rating");
