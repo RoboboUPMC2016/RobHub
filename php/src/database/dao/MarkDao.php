@@ -46,7 +46,7 @@ class MarkDao
    *
    * @param integer $behaviorId The Id of the behavior.
    * @param string $userUsername The user who rates the behavior.
-   * @return integer The mark or null if not found.
+   * @return \src\database\entity\Mark|null The mark or null if not found.
    */
   public static function getByBehaviorUser($behaviorId, $userUsername)
   {

@@ -11,7 +11,7 @@ class BehaviorDao
     /**
      * Add a new behavior entry in the database.
      *
-     * @param string $label  The label of the behavior.
+     * @param string $label The label of the behavior.
      * @param string $description The description of the behavior.
      * @param string $username The author of the behavior.
      * @return integer The last insert Id or -1 in case of error.
@@ -30,7 +30,7 @@ class BehaviorDao
     /**
      * Get all the behaviors.
      *
-     * @return Behavior[] $behaviors return all the behaviors.
+     * @return \src\database\entity\Behavior[] $behaviors return all the behaviors.
      */
     public static function getAll()
     {
@@ -57,7 +57,7 @@ class BehaviorDao
      * Get the behavior with a given behavior Id.
      *
      * @param integer $id The Id of the behavior.
-     * @return Behavior|null $behaviors The behavior or null if not found.
+     * @return \src\database\entity\Behavior|null $behaviors The behavior or null if not found.
      */
     public static function getById($id)
     {

@@ -34,7 +34,7 @@ class UserDao
    *
    * @param string $login The login(=username) of the user.
    * @param string $password The password of the user.
-   * @return User The user with a given login and a password or null if not found.
+   * @return \src\database\entity\User|null The user with a given login and a password or null if not found.
    */
     public static function get($login, $password)
     {
@@ -55,7 +55,7 @@ class UserDao
      * Get the user with a given login.
      *
      * @param string $login The login(=username) of the user.
-     * @return User The user with a given login and a password or null if not found.
+     * @return \src\database\entity\User|null The user with a given login and a password or null if not found.
      */
     public static function find($login)
     {
