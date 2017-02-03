@@ -38,23 +38,32 @@ html::tag("div");
     html::tag("div");
       require_once __DIR__ . "/php/src/database/dao/BehaviorDao.php";
       $behaviors = BehaviorDao::getAll();
-      foreach ($behaviors as $behavior)
-      {
-        html::add_attribute("class", "col-md-4 text-center");
-        html::tag("div");
-          html::add_attribute("class", "blog-inner");
-          html::tag("div");
-            // Image
-            html::insert_code('<a href="behaviordetails.php?bid=' . $behavior->id . '"><img class="img-responsive" src="assets/images/image_4.jpg" alt="' . $behavior->label . '"></a>');
 
-            // Label + desc
-            html::add_attribute("class", "desc");
+      // No behavior uploaded
+      if (empty($behaviors))
+      {
+        html::tag("p", "No behavior has been uploaded.");
+      }
+      else
+      {
+        foreach ($behaviors as $behavior)
+        {
+          html::add_attribute("class", "col-md-4 text-center");
+          html::tag("div");
+            html::add_attribute("class", "blog-inner");
             html::tag("div");
-              html::tag("h3", $behavior->label);
-              html::tag("p", $behavior->description);
+              // Image
+              html::insert_code('<a href="behaviordetails.php?bid=' . $behavior->id . '"><img class="img-responsive" src="assets/images/image_4.jpg" alt="' . $behavior->label . '"></a>');
+
+              // Label + desc
+              html::add_attribute("class", "desc");
+              html::tag("div");
+                html::tag("h3", $behavior->label);
+                html::tag("p", $behavior->description);
+              html::close();
             html::close();
           html::close();
-        html::close();
+        }
       }
 
     html::close();
